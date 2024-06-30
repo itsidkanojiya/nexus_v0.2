@@ -20,6 +20,7 @@ export default async function getData(endPoint, token = null) {
 
     console.log(result);
 
+    // d
     if (response.ok) {
       return result;
     }
