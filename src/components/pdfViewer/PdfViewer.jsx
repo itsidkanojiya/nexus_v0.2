@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import { GrFormPrevious } from "react-icons/gr";
+import { MdOutlineNavigateNext } from "react-icons/md";
 import { Document, Page } from "react-pdf";
-import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-import ReactDOMServer from "react-dom/server";
 
 const PdfViewer = ({ file }) => {
   const [numPages, setNumPages] = useState(null);
@@ -9,34 +9,40 @@ const PdfViewer = ({ file }) => {
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
-    setPageNumber(1); // Reset to first page when a new document is loaded
   }
 
-  const goToPrevPage = () => setPageNumber(pageNumber - 1);
-  const goToNextPage = () => setPageNumber(pageNumber + 1);
+  const goToNextPage = () => {
+    if (pageNumber < numPages) {
+      setPageNumber((prevPageNumber) => prevPageNumber + 1);
+    }
+  };
 
-  const jsx = (
-    <div>
+  const goToPreviousPage = () => {
+    if (pageNumber > 1) {
+      setPageNumber((prevPageNumber) => prevPageNumber - 1);
+    }
+  };
+
+  return (
+    <div className="border p-4 space-y-2 w-fit">
       <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
-        <Page pageNumber={pageNumber} />
+        <Page height={200} width={300} pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} />
       </Document>
-      <div className="controls">
-        <button disabled={pageNumber <= 1} onClick={goToPrevPage}>
-          Previous
-        </button>
-        <button disabled={pageNumber >= numPages} onClick={goToNextPage}>
-          Next
-        </button>
+      <div className=" flex justify-center items-center">
+        <div className="flex justify-center space-x-4 bg-white shadow-lg px-3 rounded-full">
+          <button onClick={goToPreviousPage} disabled={pageNumber <= 1} className=" disabled:opacity-50">
+            <GrFormPrevious className=" text-2xl" />
+          </button>
+          <p className="text-center my-2">
+            Page {pageNumber} of {numPages}
+          </p>
+          <button onClick={goToNextPage} disabled={pageNumber >= numPages} className="disabled:opacity-50">
+            <MdOutlineNavigateNext className=" text-2xl " />
+          </button>
+        </div>
       </div>
-      <p>
-        Page {pageNumber} of {numPages}
-      </p>
     </div>
   );
-
-  const jsxString = ReactDOMServer.renderToStaticMarkup(jsx);
-
-  return <div dangerouslySetInnerHTML={{ __html: jsxString }} style={{ textAlign: "center" }} />;
 };
 
 export default PdfViewer;

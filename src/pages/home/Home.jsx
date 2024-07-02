@@ -9,13 +9,12 @@ const Home = () => {
     queryFn: () => getData("books"),
   });
   return (
-    <div>
-      {/* {data?.books?.map((book) => (
+    <div className=" grid grid-cols-4 gap-4">
+      {data?.books?.map((book) => (
         <div key={book?.id}>
           <PdfViewer file={book?.pdf_link} />
-          </div>
-          ))} */}
-      <PdfViewer file={data?.books[0] && data?.books[0].pdf_link} />
+        </div>
+      ))}
     </div>
   );
 };
