@@ -13,7 +13,7 @@ export const headerLinksData = [
       { title: "state board books solution", path: "state-board-books-solution" },
     ],
   },
-  { title: "Any question solution", path: "any-question-solution" },
+  // { title: "Any question solution", path: "any-question-solution" },
 ];
 
 export const dashboardLinks = [

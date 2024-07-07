@@ -1,11 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.noScroll {
+* {
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
 }
-.noScroll::-webkit-scrollbar {
+*::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
+}
+@layer {
+  body {
+    @apply bg-tertiary text-gray-800;
+  }
 }
