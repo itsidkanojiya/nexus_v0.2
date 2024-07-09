@@ -14,7 +14,7 @@ export default function InputBox({ register = () => {}, errors = {}, label = "Ad
           <input {...register(name, { required: isRequired ? `${label} is required.` : false })} type={type} placeholder={placeholder} className={`w-full p-2.5 border-2 rounded-md focus:outline-none ${rightIcon ? "pe-8" : leftIcon ? "ps-8" : ""}  ${className} ${errors?.[name] ? "border-red-600" : ""}`} />
           {topLabel && (
             <div className=" absolute -top-2.5 left-2 bg-white px-1 text-slate-700">
-              <p className=" text-sm font-semibold">{label}</p>
+              <p className=" text-sm font-semibold text-slate-400 tracking-wide">{label}</p>
             </div>
           )}
         </div>
