@@ -1,16 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { FaS } from "react-icons/fa6";
 
 const initialState = {
   isLogin: false,
 };
 
-const authSlice = createSlice({
+const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    login: (state, action) => {
+    setLogin: (state) => {
       state.isLogin = true;
     },
   },
 });
+
+export const { setLogin } = appSlice.actions;
+export default appSlice.reducer;

@@ -19,12 +19,14 @@ const headerDetails = {
 
 const PaperPreview = () => {
   return (
-    <div className="w-full max-w-screen-lg mx-auto">
-      <PDFDownloadLink document={<PDFPreview headerDetails={headerDetails} questionsList={questionsList} />} fileName="nexusPaper.pdf" className="p-2 bg-red-600 rounded-2xl">
-        {({ loading }) => (loading ? "Loading document..." : "Download now!")}
-      </PDFDownloadLink>
-      <div className=" mt-2">
-        <PDFViewer className="w-full h-[500px]" showToolbar={false}>
+    <div className="w-full">
+      <div className=" flex items-center justify-center">
+        <PDFDownloadLink document={<PDFPreview headerDetails={headerDetails} questionsList={questionsList} />} fileName="nexusPaper.pdf" className="p-2 bg-red-600 w-full text-center text-white font-semibold mb-0" style={{ width: "100%" }}>
+          {({ loading }) => (loading ? "Loading document..." : "Download now!")}
+        </PDFDownloadLink>
+      </div>
+      <div className="">
+        <PDFViewer className="w-full min-h-[600px]" showToolbar={false}>
           <PDFPreview headerDetails={headerDetails} questionsList={questionsList} />
         </PDFViewer>
       </div>

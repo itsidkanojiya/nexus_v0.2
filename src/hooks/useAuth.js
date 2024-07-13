@@ -1,31 +1,36 @@
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { setLogin } from "../store/features/appSlice";
 
 const useAuth = (redirectToLogin = false) => {
-  const [token, setToken] = useState(() => localStorage.getItem("token") || null);
-  const [loading, setLoading] = useState(true);
-  const history = useHistory();
+  const [token, setToken] = useState(() => localStorage.getItem("nexusToken") || null);
+  const [loading, setLoadingState] = useState(true);
+  const dispatch = useDispatch();
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
+    const storedToken = localStorage.getItem("nexusToken");
     if (storedToken) {
       setToken(storedToken);
-    }
-    setLoading(false);
-
-    if (!storedToken && redirectToLogin) {
+      dispatch(setLogin(true));
+    } else if (redirectToLogin) {
       history.push("/login");
     }
-  }, [redirectToLogin, history]);
+    setLoadingState(false);
+    dispatch(setLogin(false));
+  }, [pathname, dispatch, redirectToLogin]);
 
   const login = (newToken) => {
     localStorage.setItem("nexusToken", newToken);
     setToken(newToken);
+    dispatch(setLogin(true));
   };
 
   const logout = () => {
     localStorage.removeItem("nexusToken");
     setToken(null);
+    dispatch(setLogin(false));
   };
 
   return { token, loading, login, logout };

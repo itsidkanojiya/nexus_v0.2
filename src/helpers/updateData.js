@@ -1,31 +1,35 @@
 import { API_ENDPOINT } from "../constants/api_endpoint";
 
-export default async function updateData(endPoint, data = null, token = null) {
+export default async function updateData(endPoint, data, token, method = "POST") {
   const myHeaders = new Headers();
-  myHeaders.append("Accept", "application/json");
-  myHeaders.append("Content-Type", "application/json");
 
+  // Add token if provided
   if (token) {
     myHeaders.append("Authorization", `Bearer ${token}`);
   }
 
+  const formData = new FormData();
+  for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+  }
+
   const requestOptions = {
-    method: method,
+    method,
     headers: myHeaders,
+    body: formData,
     redirect: "follow",
   };
 
-  if (data) {
-    requestOptions.body = JSON.stringify(data);
-  }
-
   try {
     const response = await fetch(`${API_ENDPOINT}${endPoint}`, requestOptions);
+    const responseData = await response.json();
+
     if (response.ok) {
-      return result;
+      return responseData;
     }
-    throw new Error(result?.message || "Something went wrong");
+
+    throw new Error(responseData?.message);
   } catch (error) {
-    throw error;
+    throw new Error(error?.message);
   }
 }
