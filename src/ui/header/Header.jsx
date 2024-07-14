@@ -5,8 +5,10 @@ import AppNavLink from "../../components/app_nav_link/AppNavLink";
 import DesktopLinks from "./DesktopLinks";
 import { Link } from "react-router-dom";
 import MobileLinks from "./MobileLinks";
+import useAuth from "../../hooks/useAuth";
 
 const Header = () => {
+  const { token } = useAuth();
   return (
     <nav className=" bg-white py-2">
       <AppContainer>

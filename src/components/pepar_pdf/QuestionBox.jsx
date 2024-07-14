@@ -13,7 +13,7 @@ const QuestionBox = ({ question, index }) => {
         <View style={tw(" flex flex-row items-center gap-2  ")}>
           {question?.options?.map((option) => (
             <View style={tw(" flex flex-row items-center gap-0.5")} key={option}>
-              <Image style={tw("h-6 w-6 object-contain")} src="/public/img/checkbox.png" />
+              <Image style={tw("h-6 w-6 object-contain")} src="/img/checkbox.png" />
               <Text style={tw("text-sm")}>{option}</Text>
             </View>
           ))}

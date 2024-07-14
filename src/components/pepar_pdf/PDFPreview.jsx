@@ -13,7 +13,7 @@ export default function PDFPreview({ headerDetails, questionsList }) {
     <Document>
       <Page size="A4" style={tw("p-8")}>
         <View>
-          <PeparHeader headerDetails={headerDetails} />
+          {headerDetails && <PeparHeader headerDetails={headerDetails} />}
           <View style={tw("mt-10")}>
             {questionTypes?.map((type, index) => (
               <View style={tw("mb-8")} key={index}>
@@ -23,7 +23,7 @@ export default function PDFPreview({ headerDetails, questionsList }) {
                     <Text style={tw("text-sm text-lg font-serif font-bold ")}>{questionsList[type].title}</Text>
                   </View>
                   <View>
-                    <Text style={tw(" text-base font-bold ")}>( 20 )</Text>
+                    <Text style={tw(" text-base font-bold ")}>( {questionsList[type].marks} )</Text>
                   </View>
                 </View>
                 {questionsList[type].questions.map((question, index) => (

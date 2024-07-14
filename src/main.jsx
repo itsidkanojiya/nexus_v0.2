@@ -7,6 +7,7 @@ import RootRouter from "./router/RootRouter.jsx";
 import { pdfjs } from "react-pdf";
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
+import { Toaster } from "react-hot-toast";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.mjs", import.meta.url).toString();
 
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <RootRouter />
+        <Toaster position="top-center" />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </Provider>

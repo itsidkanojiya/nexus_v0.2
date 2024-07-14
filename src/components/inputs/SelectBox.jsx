@@ -1,4 +1,4 @@
-export default function SelectBox({ register = () => {}, errors = {}, label = "Add Label", topLabel = true, isRequired = true, name, placeholder = "Select an option", className = "", options = [], handleRightClick = () => {}, handleLeftClick = () => {}, rightIcon = null, leftIcon = null }) {
+export default function SelectBox({ register = () => {}, defaultValue = null, handleChange = () => {}, errors = {}, label = "Add Label", topLabel = true, isRequired = true, name, placeholder = "Select an option", className = "", options = [], handleRightClick = () => {}, handleLeftClick = () => {}, rightIcon = null, leftIcon = null }) {
   return (
     <div>
       <div className="relative">
@@ -11,10 +11,8 @@ export default function SelectBox({ register = () => {}, errors = {}, label = "A
         )}
 
         <div className="relative">
-          <select {...register(name, { required: isRequired ? `${label} is required.` : false })} className={`w-full p-2.5 border-2 rounded-md focus:outline-none ${rightIcon ? "pe-8" : leftIcon ? "ps-8" : ""} ${className} ${errors?.[name] ? "border-red-600" : ""}`}>
-            <option value="" disabled>
-              {placeholder}
-            </option>
+          <select onChange={(e) => handleChange(e.target?.value)} defaultValue={defaultValue} {...register(name, { required: isRequired ? `${label} is required.` : false })} className={`w-full p-2.5 border-2 rounded-md focus:outline-none ${rightIcon ? "pe-8" : leftIcon ? "ps-8" : ""} ${className} ${errors?.[name] ? "border-red-600" : ""}`}>
+            <option value="">{placeholder}</option>
             {options.map((option, index) => (
               <option key={index} value={option.value}>
                 {option.label}

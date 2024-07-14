@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import AppButton from "../../components/buttons/AppButton";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import updateData from "../../helpers/updateData";
 import Message from "../../components/Message";
@@ -14,6 +14,7 @@ import useAuth from "../../hooks/useAuth";
 const Login = () => {
   const [showPass, setShowPass] = useState(false);
   const { token, loading, login } = useAuth();
+  const navigate = useNavigate();
 
   const schema = yup
     .object({
@@ -44,7 +45,8 @@ const Login = () => {
   } = useMutation({
     mutationFn: (formData) => updateData("login", formData),
     onSuccess: (data) => {
-      login(data?.token);
+      login(data?.token, data?.user);
+      navigate("/");
     },
     onError: (error) => {
       console.log(error);

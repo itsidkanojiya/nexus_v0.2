@@ -5,7 +5,8 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import DashboardLayout from "../layout/DashboardLayout";
 import { testData } from "../constants/useFullData";
-import PaperPreview from "../pages/teachers_dashboard/paper_preview/PaperPreview";
+import PrivateRoute from "./PrivateRoute";
+import CreatePaper from "../pages/teachers_dashboard/paper/create_paper/CreatePaper";
 
 const router = createBrowserRouter([
   {
@@ -28,15 +29,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/question-paper-generator",
-    element: <DashboardLayout />,
+    element: <PrivateRoute component={DashboardLayout} />,
     children: [
       {
         index: true,
-        element: <p>{testData}</p>,
+        element: <CreatePaper />,
       },
       {
         path: "/question-paper-generator/create-paper",
-        element: <PaperPreview />,
+        element: <CreatePaper />,
       },
       {
         path: "/question-paper-generator/view-paper",
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
         element: <p>{testData}</p>,
       },
     ],
+  },
+  {
+    path: "/unauthorized",
+    element: <PrivateRoute component={DashboardLayout} user_type="student" />,
   },
 ]);
 
