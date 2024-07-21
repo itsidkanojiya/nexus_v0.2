@@ -3,7 +3,7 @@ import PaperDetails from "../PaperDetails";
 import QuestionsList from "../../questions_list/QuestionsList";
 import { useDispatch, useSelector } from "react-redux";
 
-import PaperPreview from "./PaperPreview";
+import PaperPreview from "../../paper_preview/PaperPreview";
 import AddMarks from "./AddMarks";
 import { useState } from "react";
 

@@ -4,7 +4,7 @@ import PaperList from "./PaperList";
 import PaperDetails from "./PaperDetails";
 
 import QuestionsList from "./QuestionsList";
-import PaperPreview from "../create_paper/PaperPreview";
+import PaperPreview from "../../paper_preview/PaperPreview";
 import AddMarks from "./AddMarks";
 
 const ViewPaper = () => {
