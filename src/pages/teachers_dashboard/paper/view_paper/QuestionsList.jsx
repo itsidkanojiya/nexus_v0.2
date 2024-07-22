@@ -12,7 +12,6 @@ import {
     addQuestion,
     removeQuestion,
     selectIsQuestionSelected,
-    setQuestionsList,
     setFilteredQuestion,
     setQuestionsType,
     setSearch,
@@ -82,10 +81,7 @@ export default function QuestionsList({ goNext, goPrev }) {
     return (
         <div>
             <div className=" flex justify-between items-center mb-4">
-                <AppButton
-                    onClick={() => (goPrev())}
-                    className=" text-xs"
-                >
+                <AppButton onClick={() => goPrev()} className=" text-xs">
                     Go Back
                 </AppButton>
                 {selectedQuestions?.length > 0 && (

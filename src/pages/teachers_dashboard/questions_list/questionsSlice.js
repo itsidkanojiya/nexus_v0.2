@@ -4,8 +4,6 @@ const initialState = {
     questionsList: [],
     filteredQuestion: [],
     selectedQuestions: [],
-    questions_type: null,
-    search: null,
     marks: {
         mcq: 0,
         blanks: 0,
@@ -20,11 +18,8 @@ const questionSlice = createSlice({
     name: "questions",
     initialState,
     reducers: {
-        setQuestionsList: (state, action) => {
-            state.questionsList = action.payload;
-            state.filteredQuestion = action.payload;
-        },
         setFilteredQuestion: (state, action) => {
+            state.questionsList = action.payload;
             state.filteredQuestion = action.payload;
         },
         addQuestion: (state, action) => {
@@ -41,7 +36,6 @@ const questionSlice = createSlice({
             );
         },
         setQuestionsType: (state, action) => {
-            state.questions_type = action.payload;
             if (action?.payload) {
                 state.filteredQuestion = state?.questionsList?.filter(
                     (question) => question?.type === action.payload
@@ -51,9 +45,10 @@ const questionSlice = createSlice({
             }
         },
         setSearch: (state, action) => {
-            state.search = action.payload;
             state.filteredQuestion = state?.questionsList?.filter((question) =>
-                question?.question?.includes(action?.payload)
+                question?.question
+                    ?.toLowerCase()
+                    .includes(action?.payload.toLowerCase())
             );
         },
         setMarks: (state, action) => {
@@ -63,8 +58,6 @@ const questionSlice = createSlice({
         resetQuestions: (state) => {
             state.filteredQuestion = state.questionsList;
             state.selectedQuestions = [];
-            state.questions_type = null;
-            state.search = null;
         },
         setSelectedQuestions: (state, action) => {
             state.selectedQuestions = action.payload;
@@ -73,7 +66,6 @@ const questionSlice = createSlice({
 });
 
 export const {
-    setQuestionsList,
     setFilteredQuestion,
     addQuestion,
     removeQuestion,

@@ -12,7 +12,6 @@ import {
     addQuestion,
     removeQuestion,
     selectIsQuestionSelected,
-    setQuestionsList,
     setFilteredQuestion,
     setQuestionsType,
     setSearch,
