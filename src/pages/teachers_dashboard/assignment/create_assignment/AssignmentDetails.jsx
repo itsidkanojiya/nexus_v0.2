@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import InputBox from "../../../components/inputs/InputBox";
-import AppButton from "../../../components/buttons/AppButton";
-import GetBoards from "../../../components/get_boards/GetBoards";
-import GetStandard from "../../../components/get_standard/GetStandard";
-import GetSubjects from "../../../components/get_subjects/GetSubjects";
-import { getDayName } from "../../../functions/getDay";
-import FileInputBox from "../../../components/inputs/FileInputBox";
+import InputBox from "../../../../components/inputs/InputBox";
+import AppButton from "../../../../components/buttons/AppButton";
+import GetBoards from "../../../../components/get_boards/GetBoards";
+import GetStandard from "../../../../components/get_standard/GetStandard";
+import GetSubjects from "../../../../components/get_subjects/GetSubjects";
+import { getDayName } from "../../../../functions/getDay";
+import FileInputBox from "../../../../components/inputs/FileInputBox";
 import { useDispatch, useSelector } from "react-redux";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import getData from "../../../helpers/getData";
-import useAuth from "../../../hooks/useAuth";
+import getData from "../../../../helpers/getData";
+import useAuth from "../../../../hooks/useAuth";
 import { object } from "yup";
 
-import updateData from "../../../helpers/updateData";
+import updateData from "../../../../helpers/updateData";
 import toast from "react-hot-toast";
-import { usePaperStore } from "../../../zustand/store";
+import { usePaperStore } from "../../../../zustand/store";
 
-const PaperDetails = ({ step, goNext, goPrev }) => {
+const AssignmentDetails = ({ step, goNext, goPrev }) => {
     const { token, user } = useAuth();
     const [logo, setLogo] = useState(null);
     const paper = usePaperStore((state) => state.paper);
@@ -61,11 +61,11 @@ const PaperDetails = ({ step, goNext, goPrev }) => {
     // Add Paper Details
     const { mutateAsync: addNewPaper, isPending } = useMutation({
         mutationFn: (data) =>
-            updateData("add-paper-details", data, token, "POST"),
+            updateData("add-assignment-details", data, token, "POST"),
         onSuccess: (data) => {
             toast.success("success");
+            setPaper(data?.assignment_details);
             goNext();
-            setPaper(data?.paper_details);
         },
         onError: (error) => {
             toast.error(error?.message);
@@ -75,11 +75,11 @@ const PaperDetails = ({ step, goNext, goPrev }) => {
     // Edit Paper Details
     const { mutateAsync: editPaper, isPending: isPendingEdit } = useMutation({
         mutationFn: (data) =>
-            updateData("edit-paper-details", data, token, "POST"),
+            updateData("edit-assignment-details", data, token, "POST"),
         onSuccess: (data) => {
             toast.success(data?.message);
             goNext();
-            setPaper(data?.paper_details);
+            setPaper(data?.assignment_details);
         },
         onError: (error) => {
             toast.error(error?.message);
@@ -103,7 +103,7 @@ const PaperDetails = ({ step, goNext, goPrev }) => {
         <div className="">
             <div className="  mb-4 flex">
                 <div className="w-fit py-0.5 px-2  text-sm font-bold uppercase  border shadow-sm rounded-full">
-                    Paper Details
+                    Assignment Details
                 </div>
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className=" space-y-4">
@@ -172,4 +172,4 @@ const PaperDetails = ({ step, goNext, goPrev }) => {
     );
 };
 
-export default PaperDetails;
+export default AssignmentDetails;

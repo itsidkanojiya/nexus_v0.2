@@ -15,7 +15,6 @@ export default function PDFPreview({ headerDetails, questionsList }) {
         "short",
         "long",
     ];
-
     return (
         <Document>
             <Page size="A4" style={tw("p-8")}>
@@ -76,6 +75,8 @@ export default function PDFPreview({ headerDetails, questionsList }) {
                                                 key={index}
                                                 question={question}
                                                 index={index}
+                                                isPaper={true}
+                                                type={type}
                                             />
                                         )
                                     )}

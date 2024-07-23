@@ -8,6 +8,8 @@ import { testData } from "../constants/useFullData";
 import PrivateRoute from "./PrivateRoute";
 import CreatePaper from "../pages/teachers_dashboard/paper/create_paper/CreatePaper";
 import ViewPaper from "../pages/teachers_dashboard/paper/view_paper/ViewPaper";
+import CreateAssignment from "../pages/teachers_dashboard/assignment/create_assignment/CreateAssignment";
+import ViewAssignment from "../pages/teachers_dashboard/assignment/view_assignment/ViewAssignment";
 
 const router = createBrowserRouter([
     {
@@ -46,11 +48,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/question-paper-generator/create-assignment",
-                element: <p>{testData}</p>,
+                element: <CreateAssignment />,
             },
             {
                 path: "/question-paper-generator/view-assignment",
-                element: <p>{testData}</p>,
+                element: <ViewAssignment />,
             },
         ],
     },

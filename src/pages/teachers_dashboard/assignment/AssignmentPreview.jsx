@@ -1,14 +1,15 @@
 import React from "react";
-import { getSelectedQuestionsWithDetails } from "../questions_list/questionsSlice";
+import { getSelectedQuestionsWithDetails } from "../../../store/features/questionsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
-import PDFPreview from "../../../components/paper_pdf/PDFPreview";
+
 import AppButton from "../../../components/buttons/AppButton";
 import { useMutation } from "@tanstack/react-query";
 import updateData from "../../../helpers/updateData";
 import toast from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
 import { usePaperStore } from "../../../zustand/store";
+import PDFPreview from "../../../components/assignment_pdf/PDFPreview";
 
 const PaperPreview = ({
     step = null,
@@ -28,7 +29,7 @@ const PaperPreview = ({
 
     const { mutateAsync: addQuestions, isPending } = useMutation({
         mutationFn: (data) =>
-            updateData("add-paper-questions", data, token, "POST", true),
+            updateData("add-assignment-questions", data, token, "POST", true),
         onSuccess: (data) => {
             toast.success(data?.message);
             console.log(data);

@@ -1,13 +1,13 @@
 import React from "react";
 import { useState } from "react";
-import PaperList from "./PaperList";
-import PaperDetails from "./PaperDetails";
+import AssignmentList from "./AssignmentList";
+import AssignmentDetails from "./AssignmentDetails";
 
 import QuestionsList from "./QuestionsList";
-import PaperPreview from "../paper_preview/PaperPreview";
+import AssignmentPreview from "../AssignmentPreview";
 import AddMarks from "./AddMarks";
 
-const ViewPaper = () => {
+const ViewAssignment = () => {
     const [step, setStep] = useState(0);
 
     const goNext = () => {
@@ -20,13 +20,13 @@ const ViewPaper = () => {
 
     return (
         <>
-            {step === 0 && <PaperList goNext={goNext} />}
-            {step === 1 && <PaperDetails goNext={goNext} goPrev={goPrev} />}
+            {step === 0 && <AssignmentList goNext={goNext} />}
+            {step === 1 && <AssignmentDetails goNext={goNext} goPrev={goPrev} />}
             {step === 2 && <QuestionsList goNext={goNext} goPrev={goPrev} />}
             {step === 3 && <AddMarks goNext={goNext} goPrev={goPrev} />}
-            {step === 4 && <PaperPreview goPrev={goPrev} />}
+            {step === 4 && <AssignmentPreview goPrev={goPrev} />}
         </>
     );
 };
 
-export default ViewPaper;
+export default ViewAssignment;

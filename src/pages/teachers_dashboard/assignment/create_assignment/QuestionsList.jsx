@@ -4,7 +4,7 @@ import InputBox from "../../../../components/inputs/InputBox";
 import { AiOutlineSearch } from "react-icons/ai";
 import AppButton from "../../../../components/buttons/AppButton";
 import { useDispatch, useSelector } from "react-redux";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import getData from "../../../../helpers/getData";
 import useAuth from "../../../../hooks/useAuth";
 import { IoAdd, IoRemoveOutline } from "react-icons/io5";
@@ -15,12 +15,9 @@ import {
     setFilteredQuestion,
     setQuestionsType,
     setSearch,
-    setSelectedQuestions,
 } from "../../../../store/features/questionsSlice";
 import Message from "../../../../components/Message";
 import { usePaperStore } from "../../../../zustand/store";
-import toast from "react-hot-toast";
-import updateData from "../../../../helpers/updateData";
 
 export default function QuestionsList({ goNext, goPrev }) {
     const dispatch = useDispatch();
@@ -39,19 +36,6 @@ export default function QuestionsList({ goNext, goPrev }) {
         queryKey: ["getQuestions"],
         queryFn: () => getData("get-questions", token),
     });
-    const setQuestionsForTypes = (questions) => {
-        // Create an array to hold all questions
-        const allQuestions = [];
-
-        // Iterate over each question type
-        Object.keys(questions).forEach((type) => {
-            const questionsOfType = questions[type]?.questions || [];
-            allQuestions.push(...questionsOfType);
-        });
-
-        // Dispatch the action with all collected questions
-        dispatch(setSelectedQuestions(allQuestions));
-    };
 
     useEffect(() => {
         if (allQuestions && paper) {
@@ -65,7 +49,6 @@ export default function QuestionsList({ goNext, goPrev }) {
             );
 
             dispatch(setFilteredQuestion(newList));
-            setQuestionsForTypes(paper?.questions);
         }
     }, [allQuestions, paper]);
 
@@ -85,12 +68,7 @@ export default function QuestionsList({ goNext, goPrev }) {
                     Go Back
                 </AppButton>
                 {selectedQuestions?.length > 0 && (
-                    <AppButton
-                        onClick={() => {
-                            goNext();
-                        }}
-                        className=" text-xs"
-                    >
+                    <AppButton onClick={() => goNext()} className=" text-xs">
                         Next
                     </AppButton>
                 )}
