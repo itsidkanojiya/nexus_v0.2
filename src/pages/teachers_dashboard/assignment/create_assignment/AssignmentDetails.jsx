@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import InputBox from "../../../../components/inputs/InputBox";
+import InputBox, { validateTime } from "../../../../components/inputs/InputBox";
 import AppButton from "../../../../components/buttons/AppButton";
 import GetBoards from "../../../../components/get_boards/GetBoards";
 import GetStandard from "../../../../components/get_standard/GetStandard";
@@ -126,11 +126,13 @@ const AssignmentDetails = ({ step, goNext, goPrev }) => {
                         label="School Name"
                     />
                     <InputBox
+                        mask="99:99"
                         register={register}
                         errors={errors}
                         name="timing"
-                        placeholder="Paper Time ( ex : 3 Hours )"
+                        placeholder="hh:mm"
                         label="Paper Timing"
+                        validate={validateTime}
                     />
                     <InputBox
                         type="date"
