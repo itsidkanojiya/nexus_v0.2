@@ -7,8 +7,8 @@ const QuestionBox = ({ question, index, isPaper, type }) => {
         <View style={tw("ml-8 mb-4")}>
             <View style={tw(" flex  flex-row items-center  justify-between ")}>
                 <View style={tw(" flex flex-row items-center gap-2  ")}>
-                    <Text style={tw(" text-base ")}>( {index + 1} )</Text>
-                    <Text style={tw(" text-base ")}>{question?.question}</Text>
+                    <Text style={tw(" text-sm ")}>( {index + 1} )</Text>
+                    <Text style={tw(" text-sm ")}>{question?.question}</Text>
                 </View>
                 {type === "true_false" && (
                     <Image
@@ -28,20 +28,20 @@ const QuestionBox = ({ question, index, isPaper, type }) => {
                                 style={tw("h-6 w-6 object-contain")}
                                 src="/img/checkbox.png"
                             />
-                            <Text style={tw("text-sm")}>{option}</Text>
+                            <Text style={tw("text-[16px]")}>{option}</Text>
                         </View>
                     ))}
                 </View>
             )}
 
             {type === "onetwo" && (
-                <Text style={tw(" text-base ")}>
+                <Text style={tw(" text-sm ")}>
                     ______________________________________________________________________________
                     ______________________________________________________________________________
                 </Text>
             )}
             {type === "short" && (
-                <Text style={tw(" text-base ")}>
+                <Text style={tw(" text-sm ")}>
                     ______________________________________________________________________________
                     ______________________________________________________________________________
                     ______________________________________________________________________________
@@ -49,7 +49,7 @@ const QuestionBox = ({ question, index, isPaper, type }) => {
                 </Text>
             )}
             {type === "long" && (
-                <Text style={tw(" text-base ")}>
+                <Text style={tw(" text-sm ")}>
                     ______________________________________________________________________________
                     ______________________________________________________________________________
                     ______________________________________________________________________________

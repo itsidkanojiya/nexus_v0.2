@@ -21,10 +21,12 @@ const ViewAssignment = () => {
     return (
         <>
             {step === 0 && <AssignmentList goNext={goNext} />}
-            {step === 1 && <AssignmentDetails goNext={goNext} goPrev={goPrev} />}
+            {step === 1 && (
+                <AssignmentDetails goNext={goNext} goPrev={goPrev} />
+            )}
             {step === 2 && <QuestionsList goNext={goNext} goPrev={goPrev} />}
-            {step === 3 && <AddMarks goNext={goNext} goPrev={goPrev} />}
-            {step === 4 && <AssignmentPreview goPrev={goPrev} />}
+            {/* {step === 3 && <AddMarks goNext={goNext} goPrev={goPrev} />} */}
+            {step === 3 && <AssignmentPreview goPrev={goPrev} />}
         </>
     );
 };

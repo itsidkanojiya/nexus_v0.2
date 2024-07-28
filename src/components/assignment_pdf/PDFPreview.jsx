@@ -15,6 +15,8 @@ export default function PDFPreview({ headerDetails, questionsList }) {
         "short",
         "long",
     ];
+
+    let characterIndex = 0;
     return (
         <Document>
             <Page size="A4" style={tw("p-8")}>
@@ -26,6 +28,9 @@ export default function PDFPreview({ headerDetails, questionsList }) {
                         {questionTypes?.map((_, index) => {
                             const type = questionTypes[index];
                             if (!questionsList[type]) return;
+                            const character =
+                                characters[characterIndex % characters.length];
+                            characterIndex++;
                             return (
                                 <View style={tw("mb-8")} key={index}>
                                     <View
@@ -40,26 +45,20 @@ export default function PDFPreview({ headerDetails, questionsList }) {
                                         >
                                             <Text
                                                 style={tw(
-                                                    "text-sm text-lg font-serif font-bold uppercase "
+                                                    "text-[19px] text-lg font-serif font-bold uppercase "
                                                 )}
                                             >
-                                                {
-                                                    characters[
-                                                        index %
-                                                            characters.length
-                                                    ]
-                                                }{" "}
-                                                )
+                                                {character} )
                                             </Text>
                                             <Text
                                                 style={tw(
-                                                    "text-sm text-lg font-serif font-bold "
+                                                    "text-[19px] text-lg font-serif font-bold "
                                                 )}
                                             >
                                                 {questionsList[type].title}
                                             </Text>
                                         </View>
-                                        <View>
+                                        {/* <View>
                                             <Text
                                                 style={tw(
                                                     " text-base font-bold "
@@ -67,7 +66,7 @@ export default function PDFPreview({ headerDetails, questionsList }) {
                                             >
                                                 ( {questionsList[type].marks} )
                                             </Text>
-                                        </View>
+                                        </View> */}
                                     </View>
                                     {questionsList[type].questions.map(
                                         (question, index) => (

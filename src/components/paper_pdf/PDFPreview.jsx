@@ -15,18 +15,25 @@ export default function PDFPreview({ headerDetails, questionsList }) {
         "short",
         "long",
     ];
+    let characterIndex = 0;
 
     return (
         <Document>
             <Page size="A4" style={tw("p-8")}>
                 <View>
                     {headerDetails && (
-                        <PeparHeader headerDetails={headerDetails} />
+                        <PeparHeader
+                            headerDetails={headerDetails}
+                            questionsList={questionsList}
+                        />
                     )}
                     <View style={tw("mt-10")}>
                         {questionTypes?.map((_, index) => {
                             const type = questionTypes[index];
                             if (!questionsList[type]) return;
+                            const character =
+                                characters[characterIndex % characters.length];
+                            characterIndex++;
                             return (
                                 <View style={tw("mb-8")} key={index}>
                                     <View
@@ -44,13 +51,7 @@ export default function PDFPreview({ headerDetails, questionsList }) {
                                                     "text-sm text-lg font-serif font-bold uppercase "
                                                 )}
                                             >
-                                                {
-                                                    characters[
-                                                        index %
-                                                            characters.length
-                                                    ]
-                                                }{" "}
-                                                )
+                                                {character} )
                                             </Text>
                                             <Text
                                                 style={tw(

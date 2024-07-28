@@ -24,8 +24,8 @@ const CreateAssignment = () => {
                 <AssignmentDetails goNext={goNext} goPrev={goPrev} />
             )}
             {step === 1 && <QuestionsList goNext={goNext} goPrev={goPrev} />}
-            {step === 2 && <AddMarks goNext={goNext} goPrev={goPrev} />}
-            {step === 3 && <PaperPreview goNext={goNext} goPrev={goPrev} />}
+            {/* {step === 2 && <AddMarks goNext={goNext} goPrev={goPrev} />} */}
+            {step === 2 && <PaperPreview goNext={goNext} goPrev={goPrev} />}
         </>
     );
 };
