@@ -25,12 +25,12 @@ const AddMarks = ({ step = null, goNext = () => {}, goPrev = () => {} }) => {
     } = useForm({});
 
     const titles = {
-        mcq: "Multiple Choice Questions (MCQs)",
-        blanks: "Fill in the Blanks",
-        true_false: "True or False",
-        onetwo: "One-liner Questions",
-        short: "Short Questions",
-        long: "Long Questions",
+        mcq: "Multiple Choice Questions (MCQs). Tick the correct options.",
+        blanks: "Fill in the blanks in each sentence with an appropriate word.",
+        true_false: "Write (T) for True and (F) for False.",
+        onetwo: "Answer the following questions in one or two sentences.",
+        short: "Short Answer Questions.",
+        long: "Long Answer Questions.",
     };
 
     const onSubmit = (data) => {
@@ -118,7 +118,7 @@ const AddMarks = ({ step = null, goNext = () => {}, goPrev = () => {} }) => {
                             errors={errors}
                             name="short"
                             placeholder="Marks"
-                            label={`Short Questions ( ${
+                            label={`Short Answer Questions. ( ${
                                 paperQuestions?.short?.questions?.length || 0
                             } ) `}
                         />
@@ -130,7 +130,7 @@ const AddMarks = ({ step = null, goNext = () => {}, goPrev = () => {} }) => {
                             errors={errors}
                             name="long"
                             placeholder="Marks"
-                            label={`Long Questions ( ${
+                            label={`Long Answer Questions. ( ${
                                 paperQuestions?.long?.questions?.length || 0
                             } ) `}
                         />

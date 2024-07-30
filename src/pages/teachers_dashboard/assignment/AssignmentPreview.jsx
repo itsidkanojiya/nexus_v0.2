@@ -76,7 +76,18 @@ const PaperPreview = ({
             </AppButton>
             <div className=" flex items-center justify-center">
                 {isPending ? (
-                    <div className=" h-14 w-full animate-pulse bg-slate-300"></div>
+                    <div className=" h-14 w-full animate-pulse bg-slate-300 "></div>
+                ) : (
+                    <div
+                        onClick={handleSubmit}
+                        className="text-white hover:text-blue-200 w-[100%] mx-auto text-center bg-red-600 p-2 cursor-pointer"
+                    >
+                        Save
+                    </div>
+                )}
+
+                {isPending ? (
+                    <div className=" h-14 w-full animate-pulse bg-slate-300 "></div>
                 ) : (
                     <PDFDownloadLink
                         onClick={handleSubmit}
@@ -87,11 +98,11 @@ const PaperPreview = ({
                             />
                         }
                         fileName="nexusPaper.pdf"
-                        className="p-2 bg-red-600 w-full text-center text-white font-semibold mb-0"
+                        className="p-2 bg-red-600 w-full text-center text-white hover:text-blue-200  font-semibold mb-0"
                         style={{ width: "100%" }}
                     >
                         {({ loading }) =>
-                            loading ? "Loading document..." : "Download now!"
+                            loading ? "Loading document..." : "Download"
                         }
                     </PDFDownloadLink>
                 )}

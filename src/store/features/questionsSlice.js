@@ -85,12 +85,12 @@ export const selectIsQuestionSelected = (state, questionId) =>
 // Selector to get selected questions grouped by their types, titles, and marks
 export const getSelectedQuestionsWithDetails = (state) => {
     const titles = {
-        mcq: "Multiple Choice Questions (MCQs)",
-        blanks: "Fill in the Blanks",
-        true_false: "True or False",
-        onetwo: "One-liner Questions",
-        short: "Short Questions",
-        long: "Long Questions",
+        mcq: "Multiple Choice Questions (MCQs). Tick the correct options.",
+        blanks: "Fill in the blanks in each sentence with an appropriate word.",
+        true_false: "Write (T) for True and (F) for False.",
+        onetwo: "Answer the following questions in one or two sentences.",
+        short: "Short Answer Questions.",
+        long: "Long Answer Questions.",
     };
 
     const groupedQuestions = state.selectedQuestions.reduce((acc, question) => {
