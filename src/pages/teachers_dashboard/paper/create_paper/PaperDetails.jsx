@@ -126,13 +126,11 @@ const PaperDetails = ({ step, goNext, goPrev }) => {
                         label="School Name"
                     />
                     <InputBox
-                        mask="99:99"
                         register={register}
                         errors={errors}
                         name="timing"
-                        placeholder="hh:mm"
+                        placeholder="2 hours / 30 mins"
                         label="Paper Timing"
-                        validate={validateTime}
                     />
                     <InputBox
                         type="date"
@@ -142,13 +140,13 @@ const PaperDetails = ({ step, goNext, goPrev }) => {
                         placeholder="Paper Date"
                         label="Exam Date"
                     />
-                    <InputBox
+                    {/* <InputBox
                         register={register}
                         errors={errors}
                         name="division"
                         placeholder="division"
                         label="division"
-                    />
+                    /> */}
                     <InputBox
                         register={register}
                         errors={errors}
