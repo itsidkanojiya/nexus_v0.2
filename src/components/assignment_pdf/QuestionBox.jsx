@@ -4,7 +4,7 @@ import { tw } from "../../constants/tw.confing";
 
 const QuestionBox = ({ question, index, isPaper, type, showAnswers }) => {
     return (
-        <View style={tw("ml-8 mb-4")}>
+        <View style={tw("ml-8 mb-4 mr-8")}>
             <View style={tw(" flex  flex-row items-center  justify-between ")}>
                 <View style={tw(" flex flex-row items-center gap-2  ")}>
                     <Text style={tw(" text-sm ")}>( {index + 1} )</Text>
