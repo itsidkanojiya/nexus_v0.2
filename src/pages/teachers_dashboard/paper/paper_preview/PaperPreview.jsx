@@ -9,6 +9,7 @@ import updateData from "../../../../helpers/updateData";
 import toast from "react-hot-toast";
 import useAuth from "../../../../hooks/useAuth";
 import { usePaperStore } from "../../../../zustand/store";
+import { useState } from "react";
 
 const PaperPreview = ({
     step = null,
@@ -21,6 +22,7 @@ const PaperPreview = ({
     );
     const paper = usePaperStore((state) => state.paper);
     const dispatch = useDispatch();
+    const [showAnswers, setShowAnswers] = useState(false);
 
     const { formDatatoken } = useAuth();
 
@@ -66,13 +68,25 @@ const PaperPreview = ({
 
     return (
         <div className="w-full">
-            <AppButton
-                type="button"
-                onClick={() => goPrev()}
-                className=" bg-red-600 text-sm mb-2"
-            >
-                Go Back
-            </AppButton>
+            <div className=" flex justify-between items-center">
+                <AppButton
+                    type="button"
+                    onClick={() => goPrev()}
+                    className=" bg-red-600 text-sm mb-2"
+                >
+                    Go Back
+                </AppButton>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={showAnswers}
+                        onChange={(event) => {
+                            setShowAnswers(event.target.checked);
+                        }}
+                    />
+                    {"  "}Show Answers
+                </label>
+            </div>
             <div className=" flex items-center justify-center">
                 {isPending ? (
                     <div className=" h-14 w-full animate-pulse bg-slate-300 "></div>
@@ -91,6 +105,7 @@ const PaperPreview = ({
                         onClick={handleSubmit}
                         document={
                             <PDFPreview
+                                showAnswers={showAnswers}
                                 headerDetails={paper}
                                 questionsList={paperQuestions}
                             />
@@ -108,6 +123,7 @@ const PaperPreview = ({
             <div className="">
                 <PDFViewer className="w-full min-h-[600px]" showToolbar={false}>
                     <PDFPreview
+                        showAnswers={showAnswers}
                         headerDetails={paper}
                         questionsList={paperQuestions}
                     />

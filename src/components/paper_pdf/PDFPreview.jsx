@@ -6,7 +6,11 @@ import { tw } from "../../constants/tw.confing";
 
 const characters = ["a", "b", "c", "d", "e", "f"];
 
-export default function PDFPreview({ headerDetails, questionsList }) {
+export default function PDFPreview({
+    showAnswers,
+    headerDetails,
+    questionsList,
+}) {
     const questionTypes = [
         "mcq",
         "blanks",
@@ -77,6 +81,7 @@ export default function PDFPreview({ headerDetails, questionsList }) {
                                                 key={index}
                                                 question={question}
                                                 index={index}
+                                                showAnswers={showAnswers}
                                             />
                                         )
                                     )}

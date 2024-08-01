@@ -2,7 +2,7 @@ import { Image, Text, View } from "@react-pdf/renderer";
 import React from "react";
 import { tw } from "../../constants/tw.confing";
 
-const QuestionBox = ({ question, index, isPaper, type }) => {
+const QuestionBox = ({ question, index, isPaper, type, showAnswers }) => {
     return (
         <View style={tw("ml-8 mb-4")}>
             <View style={tw(" flex  flex-row items-center  justify-between ")}>
@@ -10,7 +10,7 @@ const QuestionBox = ({ question, index, isPaper, type }) => {
                     <Text style={tw(" text-sm ")}>( {index + 1} )</Text>
                     <Text style={tw(" text-sm ")}>{question?.question}</Text>
                 </View>
-                {type === "true_false" && (
+                {!showAnswers && type === "true_false" && (
                     <Image
                         style={tw("h-6 w-6 object-contain")}
                         src="/img/checkbox.png"
@@ -33,14 +33,18 @@ const QuestionBox = ({ question, index, isPaper, type }) => {
                     ))}
                 </View>
             )}
-
-            {type === "onetwo" && (
+            {showAnswers && (
+                <View style={tw(" flex flex-row items-center gap-2  ")}>
+                    <Text style={tw(" text-sm ")}> Ans: {question.answer}</Text>
+                </View>
+            )}
+            {!showAnswers && type === "onetwo" && (
                 <Text style={tw(" text-sm ")}>
                     ______________________________________________________________________________
                     ______________________________________________________________________________
                 </Text>
             )}
-            {type === "short" && (
+            {!showAnswers && type === "short" && (
                 <Text style={tw(" text-sm ")}>
                     ______________________________________________________________________________
                     ______________________________________________________________________________
@@ -48,7 +52,7 @@ const QuestionBox = ({ question, index, isPaper, type }) => {
                     ______________________________________________________________________________
                 </Text>
             )}
-            {type === "long" && (
+            {!showAnswers && type === "long" && (
                 <Text style={tw(" text-sm ")}>
                     ______________________________________________________________________________
                     ______________________________________________________________________________
