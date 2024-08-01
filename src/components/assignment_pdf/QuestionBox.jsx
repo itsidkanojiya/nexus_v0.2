@@ -28,7 +28,7 @@ const QuestionBox = ({ question, index, isPaper, type }) => {
                                 style={tw("h-6 w-6 object-contain")}
                                 src="/img/checkbox.png"
                             />
-                            <Text style={tw("text-[16px]")}>{option}</Text>
+                            <Text style={tw("text-sm")}>{option}</Text>
                         </View>
                     ))}
                 </View>
