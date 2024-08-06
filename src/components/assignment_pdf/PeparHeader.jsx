@@ -41,7 +41,7 @@ const PeparHeader = ({ headerDetails }) => {
                 <View style={tw("w-full text-center")}>
                     <Text
                         style={tw(
-                            "text-[32px] leading-5 font-serif font-bold mb-1"
+                            "text-[25px] leading-5 font-serif font-bold mb-1"
                         )}
                     >
                         {headerDetails?.school_name || "Default School Name"}

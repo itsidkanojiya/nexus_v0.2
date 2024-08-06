@@ -16,6 +16,7 @@ import { object } from "yup";
 import updateData from "../../../../helpers/updateData";
 import toast from "react-hot-toast";
 import { usePaperStore } from "../../../../zustand/store";
+import { setSelectedQuestions } from "../../../../store/features/questionsSlice";
 
 const AssignmentDetails = ({ step, goNext, goPrev }) => {
     const { token, user } = useAuth();
@@ -87,11 +88,7 @@ const AssignmentDetails = ({ step, goNext, goPrev }) => {
     });
 
     const onSubmit = async (data) => {
-        console.log({
-            ...data,
-            day: getDayName(data?.date),
-            logo: logo,
-        });
+        dispatch(setSelectedQuestions([]));
         await addNewPaper({
             ...data,
             day: getDayName(data?.date),

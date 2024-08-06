@@ -20,7 +20,9 @@ const ViewPaper = () => {
 
     return (
         <>
-            {step === 0 && <PaperList goNext={goNext} />}
+            {step === 0 && (
+                <PaperList goNext={goNext} goLast={() => setStep(4)} />
+            )}
             {step === 1 && <PaperDetails goNext={goNext} goPrev={goPrev} />}
             {step === 2 && <QuestionsList goNext={goNext} goPrev={goPrev} />}
             {step === 3 && <AddMarks goNext={goNext} goPrev={goPrev} />}

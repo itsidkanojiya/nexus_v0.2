@@ -17,10 +17,13 @@ const ViewAssignment = () => {
     const goPrev = () => {
         setStep(step - 1);
     };
+    const goLast = () => {
+        setStep(3);
+    };
 
     return (
         <>
-            {step === 0 && <AssignmentList goNext={goNext} />}
+            {step === 0 && <AssignmentList goNext={goNext} goLast={goLast} />}
             {step === 1 && (
                 <AssignmentDetails goNext={goNext} goPrev={goPrev} />
             )}

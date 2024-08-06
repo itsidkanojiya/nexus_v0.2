@@ -13,6 +13,7 @@ import {
     removeQuestion,
     selectIsQuestionSelected,
     setFilteredQuestion,
+    setMarks,
     setQuestionsType,
     setSearch,
 } from "../../../../store/features/questionsSlice";
@@ -68,7 +69,13 @@ export default function QuestionsList({ goNext, goPrev }) {
                     Go Back
                 </AppButton>
                 {selectedQuestions?.length > 0 && (
-                    <AppButton onClick={() => goNext()} className=" text-xs">
+                    <AppButton
+                        onClick={() => {
+                            dispatch(setMarks({}));
+                            goNext();
+                        }}
+                        className=" text-xs"
+                    >
                         Next
                     </AppButton>
                 )}

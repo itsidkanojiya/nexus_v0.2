@@ -65,6 +65,7 @@ export default function QuestionsList({ goNext, goPrev }) {
             );
 
             dispatch(setFilteredQuestion(newList));
+            console.log(paper?.questions);
             setQuestionsForTypes(paper?.questions);
         }
     }, [allQuestions, paper]);

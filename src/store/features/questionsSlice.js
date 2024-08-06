@@ -19,7 +19,6 @@ const questionSlice = createSlice({
     initialState,
     reducers: {
         setFilteredQuestion: (state, action) => {
-            console.log(action.payload);
             state.questionsList = action.payload;
             state.filteredQuestion = action.payload;
         },

@@ -10,6 +10,10 @@ import CreatePaper from "../pages/teachers_dashboard/paper/create_paper/CreatePa
 import ViewPaper from "../pages/teachers_dashboard/paper/view_paper/ViewPaper";
 import CreateAssignment from "../pages/teachers_dashboard/assignment/create_assignment/CreateAssignment";
 import ViewAssignment from "../pages/teachers_dashboard/assignment/view_assignment/ViewAssignment";
+import NcertBooks from "../pages/ncert/ncert_books/NcertBooks";
+import NcertBooksSolution from "../pages/ncert/ncert_books_solution/NcertBooksSolution";
+import StateBoardBooks from "../pages/state_board/state_board_books/StateBoardBooks";
+import StateBoardBooksSolution from "../pages/state_board/state_board_books_solution/StateBoardBooksSolution";
 
 const router = createBrowserRouter([
     {
@@ -27,6 +31,22 @@ const router = createBrowserRouter([
             {
                 path: "/sing-up",
                 element: <Register />,
+            },
+            {
+                path: "/ncert-books",
+                element: <NcertBooks />,
+            },
+            {
+                path: "/ncert-books-solution",
+                element: <NcertBooksSolution />,
+            },
+            {
+                path: "/state-board-books",
+                element: <StateBoardBooks />,
+            },
+            {
+                path: "/state-board-books-solution",
+                element: <StateBoardBooksSolution />,
             },
         ],
     },

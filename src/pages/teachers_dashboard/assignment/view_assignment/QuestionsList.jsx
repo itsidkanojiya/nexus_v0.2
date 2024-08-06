@@ -43,12 +43,13 @@ export default function QuestionsList({ goNext, goPrev }) {
         // Create an array to hold all questions
         const allQuestions = [];
 
+        console.log(questions);
         // Iterate over each question type
         Object.keys(questions).forEach((type) => {
+            console.log(type);
             const questionsOfType = questions[type]?.questions || [];
             allQuestions.push(...questionsOfType);
         });
-
         // Dispatch the action with all collected questions
         dispatch(setSelectedQuestions(allQuestions));
     };
@@ -65,6 +66,7 @@ export default function QuestionsList({ goNext, goPrev }) {
             );
 
             dispatch(setFilteredQuestion(newList));
+            console.log(paper?.questions);
             setQuestionsForTypes(paper?.questions);
         }
     }, [allQuestions, paper]);

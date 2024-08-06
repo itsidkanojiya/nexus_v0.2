@@ -1,6 +1,6 @@
 import React from "react";
 import PaperDetails from "./PaperDetails";
-import QuestionsList from "../questions_list/QuestionsList";
+import QuestionsList from "./QuestionsList";
 import { useDispatch, useSelector } from "react-redux";
 
 import AddMarks from "./AddMarks";
