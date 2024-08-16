@@ -15,6 +15,7 @@ export default function SelectBox({
     rightIcon = null,
     leftIcon = null,
 }) {
+    console.log("register:", register);
     return (
         <div>
             <div className="relative">

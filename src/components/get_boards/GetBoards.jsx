@@ -3,7 +3,7 @@ import React from "react";
 import getData from "../../helpers/getData";
 import SelectBox from "../inputs/SelectBox";
 
-const GetBoards = ({ register = {}, errors = {} }) => {
+const GetBoards = ({ register = () => {}, errors = {} }) => {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ["GetBoards"],
         queryFn: () => getData("board"),
