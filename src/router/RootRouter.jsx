@@ -14,6 +14,7 @@ import NcertBooks from "../pages/ncert/ncert_books/NcertBooks";
 import NcertBooksSolution from "../pages/ncert/ncert_books_solution/NcertBooksSolution";
 import StateBoardBooks from "../pages/state_board/state_board_books/StateBoardBooks";
 import StateBoardBooksSolution from "../pages/state_board/state_board_books_solution/StateBoardBooksSolution";
+import AboutUs from "../pages/home/AboutUs";
 
 const router = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <Home />,
+            },
+            {
+                path: "/aboutus",
+                element: <AboutUs />,
             },
             {
                 path: "/login",
