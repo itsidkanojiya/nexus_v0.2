@@ -5,11 +5,12 @@ import { useSelector } from "react-redux";
 import { FaUserCircle } from "react-icons/fa";
 import ViewProfileDialog from "./ViewProfileDialog";
 import EditProfileDialog from "./EditProfileDialog";
-
+import useAuth from "../../hooks/useAuth";
 export default function DesktopLinks() {
     const { isLogin } = useSelector((state) => state.app);
     const [showViewProfile, setShowViewProfile] = useState(false);
     const [showEditProfile, setShowEditProfile] = useState(false);
+    const { isLoggedIn, user } = useAuth();
 
     return (
         <>
@@ -37,7 +38,7 @@ export default function DesktopLinks() {
                     path: "/question-paper-generator",
                 }}
             />
-            {isLogin ? (
+            {user ? (
                 <div className="relative group">
                     <button
                         className="flex items-center"

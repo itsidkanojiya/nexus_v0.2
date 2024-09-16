@@ -39,17 +39,21 @@ export default function EditProfileDialog({ onClose }) {
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg">
-                <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
-                <form onSubmit={handleSubmit}>
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center backdrop-blur-sm">
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl max-w-md w-full relative shadow-2xl">
+                <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white">
+                    Edit Profile
+                </h2>
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <input
+                        id="currentPassword"
                         type="password"
-                        placeholder="Current Password"
+                        placeholder="Old Password"
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
                         className="block w-full mb-2 p-2 border rounded"
                     />
+
                     <input
                         type="password"
                         placeholder="New Password"
