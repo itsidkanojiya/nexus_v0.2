@@ -44,6 +44,15 @@ const questionSlice = createSlice({
                 state.filteredQuestion = state?.questionsList;
             }
         },
+        setChapter: (state, action) => {
+            if (action?.payload) {
+                state.filteredQuestion = state?.questionsList?.filter(
+                    (question) => question?.chapter === action.payload
+                );
+            } else {
+                state.filteredQuestion = state?.questionsList;
+            }
+        },
         setSearch: (state, action) => {
             state.filteredQuestion = state?.questionsList?.filter((question) =>
                 question?.question
@@ -71,6 +80,7 @@ export const {
     removeQuestion,
     setMarks,
     setQuestionsType,
+    setChapter,
     setSearch,
     resetQuestions,
     setSelectedQuestions,

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import GetQuestionType from "../../../../components/get_question_type/GetQuestionType";
+import GetChapter from "../../../../components/get_question_type/GetChapter";
 import InputBox from "../../../../components/inputs/InputBox";
 import { AiOutlineSearch } from "react-icons/ai";
 import AppButton from "../../../../components/buttons/AppButton";
@@ -14,6 +15,7 @@ import {
     selectIsQuestionSelected,
     setFilteredQuestion,
     setQuestionsType,
+    setChapter,
     setSearch,
     setSelectedQuestions,
 } from "../../../../store/features/questionsSlice";
@@ -73,6 +75,9 @@ export default function QuestionsList({ goNext, goPrev }) {
     const changeQuestionType = (val) => {
         dispatch(setQuestionsType(val));
     };
+    const changeChapter = (val) => {
+        dispatch(setChapter(val));
+    };
 
     const handleSearch = (e) => {
         const { value } = e.target;
@@ -96,8 +101,9 @@ export default function QuestionsList({ goNext, goPrev }) {
                     </AppButton>
                 )}
             </div>
-            <div className=" grid grid-cols-[auto_1fr] gap-2 mb-4">
+            <div className=" grid grid-cols-[auto_1fr_1fr] gap-2 mb-4">
                 <GetQuestionType handleChange={changeQuestionType} />
+                <GetChapter handleChange={changeChapter} />
                 <InputBox
                     handleChange={handleSearch}
                     name="search"

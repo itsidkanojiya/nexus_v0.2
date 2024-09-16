@@ -9,15 +9,22 @@ import AddMarks from "./AddMarks";
 
 const ViewAssignment = () => {
     const [step, setStep] = useState(0);
+    const [isFromFirst, setIsFromFirst] = useState(false);
 
     const goNext = () => {
         setStep(step + 1);
     };
 
     const goPrev = () => {
-        setStep(step - 1);
+        if (isFromFirst) {
+            setIsFromFirst(false);
+            setStep(0);
+        } else {
+            setStep(step - 1);
+        }
     };
     const goLast = () => {
+        setIsFromFirst(true);
         setStep(3);
     };
 

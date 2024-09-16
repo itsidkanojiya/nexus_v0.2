@@ -18,8 +18,12 @@ export default function InputBox({
     leftIcon = null,
     mask = null,
     validate = null, // Add validate prop
+    readonly = false,
+    disabled = false,
 }) {
     const inputProps = {
+        readOnly: readonly,
+        disabled: disabled,
         onChange: (e) => handleChange(e),
         ...register(name, {
             required: isRequired ? `${label} is required.` : false,

@@ -9,6 +9,7 @@ import PaperPreview from "../paper_preview/PaperPreview";
 
 const CreatePaper = () => {
     const [step, setStep] = useState(0);
+    const [lastStep, setLastStep] = useState(0);
 
     const goNext = () => {
         setStep(step + 1);

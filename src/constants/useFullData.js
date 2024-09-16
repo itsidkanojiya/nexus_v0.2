@@ -20,6 +20,8 @@ export const questionsType = [
     { name: "Long question", value: "long" },
 ];
 
+export const chapters = generateArray(12);
+
 export const days = [
     "Sunday",
     "Monday",

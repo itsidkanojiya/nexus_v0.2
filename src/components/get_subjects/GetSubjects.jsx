@@ -1,31 +1,27 @@
-import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import SelectBox from "../inputs/SelectBox";
-import getData from "../../helpers/getData";
+import InputBox from "../../components/inputs/InputBox";
+import { useState, useEffect } from "react";
 
-const GetSubjects = ({ register, errors }) => {
-    const { data, isLoading, isError, error } = useQuery({
-        queryKey: ["GetSubjects"],
-        queryFn: () => getData("subject"),
-    });
+const GetSubjects = () => {
+    const [selectedSubject, setSelectedSubject] = useState("");
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("nexusUser"));
+        const selectedSubject = user?.subject || "";
+        setSelectedSubject(selectedSubject);
+    }, []);
+    // Create a dummy register function
+    const register = () => {};
 
-    const options = data?.subjects?.map((sub) => ({
-        value: sub.name,
-        label: sub.name,
-    }));
-
-    if (isLoading) return;
     return (
-        <>
-            <SelectBox
-                name="subject"
-                placeholder="Select Subject"
-                label="Select Subject"
-                register={register}
-                errors={errors}
-                options={options}
-            />
-        </>
+        <InputBox
+            errors={{}}
+            name="subject"
+            placeholder={selectedSubject}
+            label="Subject"
+            value={selectedSubject}
+            readOnly={true}
+            disabled={true}
+        />
     );
 };
 
