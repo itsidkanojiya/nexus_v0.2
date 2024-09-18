@@ -82,6 +82,7 @@ export default function PDFPreview({
                                                 question={question}
                                                 index={index}
                                                 showAnswers={showAnswers}
+                                                type={type}
                                             />
                                         )
                                     )}
