@@ -51,6 +51,12 @@ const PeparHeader = ({ headerDetails }) => {
                     </Text>
                 </View>
             </View>
+            <View>
+                <Text style={tw("text-sm font-serif font-bold")}>
+                    NAME:
+                    ____________________________________________________________________________
+                </Text>
+            </View>
             <View
                 style={tw("flex flex-row justify-between items-center w-full")}
             >
@@ -59,7 +65,7 @@ const PeparHeader = ({ headerDetails }) => {
                         STD : {headerDetails?.std || "N/A"}
                     </Text>
                     <Text style={tw("text-sm font-serif font-bold")}>
-                        DAY : {headerDetails?.day || "N/A"}
+                        DATE : __________________________
                     </Text>
                 </View>
                 <View>
@@ -67,17 +73,7 @@ const PeparHeader = ({ headerDetails }) => {
                         SUBJECT : {headerDetails?.subject || "N/A"}
                     </Text>
                     <Text style={tw("text-sm font-serif font-bold")}>
-                        DIV : {headerDetails?.division || "N/A"}
-                    </Text>
-                </View>
-                <View>
-                    <Text style={tw("text-sm font-serif font-bold")}>
-                        DATE :{" "}
-                        {dayjs(headerDetails?.date).format("DD-MM-YYYY") ||
-                            "N/A"}
-                    </Text>
-                    <Text style={tw("text-sm font-serif font-bold")}>
-                        TIME : {headerDetails?.timing || "N/A"}
+                        DIV : __________________________
                     </Text>
                 </View>
             </View>

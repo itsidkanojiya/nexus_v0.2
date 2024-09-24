@@ -72,6 +72,7 @@ const QuestionBox = ({ question, index, isPaper, type, showAnswers }) => {
                     ______________________________________________________________________________
                 </Text>
             )}
+            
         </View>
     );
 };

@@ -87,6 +87,26 @@ export default function PDFPreview({
                                 </View>
                             );
                         })}
+                        <View
+                            style={tw(
+                                "flex flex-row justify-between items-center w-full"
+                            )}
+                        >
+                            <View>
+                                <Text
+                                    style={tw("text-sm font-serif font-bold")}
+                                >
+                                    TEACHER'S SIGN : __________________________
+                                </Text>
+                            </View>
+                            <View>
+                                <Text
+                                    style={tw("text-sm font-serif font-bold")}
+                                >
+                                    DATE : __________________________
+                                </Text>
+                            </View>
+                        </View>
                     </View>
                 </View>
             </Page>
