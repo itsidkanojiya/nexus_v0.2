@@ -46,7 +46,7 @@ const PeparHeader = ({ headerDetails, questionsList }) => {
                     >
                         {headerDetails?.school_name || "Default School Name"}
                     </Text>
-                    <Text style={tw("text-[16px] text-slate-600")}>
+                    <Text style={tw("text-[12px] text-slate-600")}>
                         {headerDetails?.address || "Default School Address"}
                     </Text>
                 </View>
