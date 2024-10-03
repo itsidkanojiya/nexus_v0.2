@@ -1,4 +1,11 @@
-import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import {
+    Page,
+    Text,
+    View,
+    Document,
+    StyleSheet,
+    Font,
+} from "@react-pdf/renderer";
 import React from "react";
 import QuestionBox from "./QuestionBox";
 import PeparHeader from "./PeparHeader";
@@ -6,7 +13,29 @@ import { tw } from "../../constants/tw.confing";
 
 const characters = ["a", "b", "c", "d", "e", "f"];
 
+Font.register({
+    family: "LohitGujarati",
+    src: "../../../public/fonts/lohit_gujarati/Lohit-Gujarati.ttf",
+});
+Font.register({
+    family: "Devnagari",
+    src: "../../../public/fonts/hindi/NotoSansDevanagari-Regular.ttf",
+});
+
+// Define styles using the registered font
+export const styles = StyleSheet.create({
+    gujarati: {
+        fontFamily: "LohitGujarati",
+        fontSize: 12,
+    },
+    hindi: {
+        fontFamily: "Devnagari",
+        fontSize: 12,
+    },
+});
+
 export default function PDFPreview({
+    gujaratiFont,
     headerDetails,
     questionsList,
     showAnswers,

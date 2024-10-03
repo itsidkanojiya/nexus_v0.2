@@ -24,15 +24,6 @@ const AddMarks = ({ goNext, goPrev }) => {
         formState: { errors },
     } = useForm({});
 
-    const titles = {
-        mcq: "Multiple Choice Questions (MCQs). Tick the correct options.",
-        blanks: "Fill in the blanks in each sentence with an appropriate word.",
-        true_false: "Write (T) for True and (F) for False.",
-        onetwo: "Answer the following questions in one or two sentences.",
-        short: "Short Answer Questions.",
-        long: "Long Answer Questions.",
-    };
-
     const onSubmit = (data) => {
         console.log(data);
         goNext();

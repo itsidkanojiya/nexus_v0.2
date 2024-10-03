@@ -12,12 +12,16 @@ const initialState = {
         short: 0,
         long: 0,
     },
+    language: "english",
 };
 
 const questionSlice = createSlice({
     name: "questions",
     initialState,
     reducers: {
+        setLanguage: (state, action) => {
+            state.language = action.payload; // Update language
+        },
         setFilteredQuestion: (state, action) => {
             state.questionsList = action.payload;
             state.filteredQuestion = action.payload;
@@ -84,6 +88,7 @@ export const {
     setSearch,
     resetQuestions,
     setSelectedQuestions,
+    setLanguage,
 } = questionSlice.actions;
 export default questionSlice.reducer;
 
@@ -102,10 +107,35 @@ export const getSelectedQuestionsWithDetails = (state) => {
         long: "Long Answer Questions.",
     };
 
+    const hindiTitles = {
+        mcq: "&#2348;&#2361;&#2369;&#2357;&#2367;&#2325;&#2354;&#2381;&#2346;&#2368;&#2351; &#2346;&#2381;&#2352;&#2358;&#2381;&#2344; (MCQs)&#2404; &#2360;&#2361;&#2368; &#2357;&#2367;&#2325;&#2354;&#2381;&#2346;&#2379;&#2306; &#2346;&#2352; &#2335;&#2367;&#2325; (&#10003;) &#2325;&#2368;&#2332;&#2367;&#2319;&#2404;",
+        blanks: "⁠प्रत्येक वाक्य में रिक्त स्थानों को एक उपयुक्त शब्द से भरें।",
+        true_false: "⁠सत्य के लिए (T) और असत्य के लिए (F) लिखें।",
+        onetwo: "⁠निम्नलिखित प्रश्नों के उत्तर एक या दो वाक्यों में दीजिए।",
+        short: "⁠लघु उत्तरीय प्रश्न।",
+        long: "दीर्घ उत्तरीय प्रश्न।",
+    };
+    const gujaratiTitles = {
+        mcq: "ઇ પ્રભામંડળ",
+        blanks: "યોગ્ય શબ્દ પસંદ કરી ખાલી જગ્યા પૂરો.",
+        true_false:
+            "ખરાં વાક્ય સામે ખરાં  ✓ અને ખોટાં વાક્ય સામે ખોટાં × ની નિશાની કરો.",
+        onetwo: "નીચે આપેલા પ્રશ્નોના બે ત્રણ વાક્યમાં જવાબ લખો. ",
+        short: "નીચે આપેલા પ્રશ્નોના જવાબ ટૂંકમાં લખો.",
+        long: "નીચે આપેલા પ્રશ્નોના જવાબ વિસ્તારપૂર્વક લખો.",
+    };
+
+    const selectedTitles =
+        state.language === "hindi"
+            ? hindiTitles
+            : state.language === "english"
+            ? gujaratiTitles
+            : titles;
+
     const groupedQuestions = state.selectedQuestions.reduce((acc, question) => {
         if (!acc[question.type]) {
             acc[question.type] = {
-                title: titles[question.type],
+                title: selectedTitles[question.type],
                 questions: [],
                 marks: state.marks[question.type] || 0,
             };
