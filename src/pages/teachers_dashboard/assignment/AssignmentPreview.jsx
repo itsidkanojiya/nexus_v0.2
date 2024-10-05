@@ -11,7 +11,6 @@ import useAuth from "../../../hooks/useAuth";
 import { usePaperStore } from "../../../zustand/store";
 import PDFPreview from "../../../components/assignment_pdf/PDFPreview";
 import { useState } from "react";
-import { Font } from "@react-pdf/renderer";
 
 const PaperPreview = ({
     step = null,
@@ -134,7 +133,6 @@ const PaperPreview = ({
             <div className="">
                 <PDFViewer className="w-full min-h-[600px]" showToolbar={false}>
                     <PDFPreview
-                        gujaratiFont={Font}
                         headerDetails={paper}
                         questionsList={paperQuestions}
                         showAnswers={showAnswers}

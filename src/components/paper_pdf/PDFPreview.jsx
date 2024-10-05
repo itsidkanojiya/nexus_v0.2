@@ -1,4 +1,11 @@
-import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import {
+    Page,
+    Text,
+    View,
+    Document,
+    StyleSheet,
+    Font,
+} from "@react-pdf/renderer";
 import React from "react";
 import QuestionBox from "./QuestionBox";
 import PeparHeader from "./PeparHeader";
@@ -6,6 +13,12 @@ import { tw } from "../../constants/tw.confing";
 
 const characters = ["a", "b", "c", "d", "e", "f"];
 
+// Define styles using the registered font
+export const styles = StyleSheet.create({
+    eng14: { fontSize: 14 },
+    guj14: { fontFamily: "LohitGujarati", fontSize: 14 },
+    hin14: { fontFamily: "Devnagari", fontSize: 14 },
+});
 export default function PDFPreview({
     showAnswers,
     headerDetails,
@@ -21,6 +34,12 @@ export default function PDFPreview({
     ];
     let characterIndex = 0;
 
+    const font14 =
+        headerDetails?.subject.toLowerCase() === "hindi"
+            ? "hin14"
+            : headerDetails?.subject.toLowerCase() === "gujarati"
+            ? "guj14"
+            : "eng14";
     return (
         <Document>
             <Page size="A4" style={tw("p-8")}>
@@ -57,20 +76,12 @@ export default function PDFPreview({
                                             >
                                                 {character} )
                                             </Text>
-                                            <Text
-                                                style={tw(
-                                                    "text-sm text-lg font-serif font-bold "
-                                                )}
-                                            >
+                                            <Text style={styles[font14]}>
                                                 {questionsList[type].title}
                                             </Text>
                                         </View>
                                         <View>
-                                            <Text
-                                                style={tw(
-                                                    " text-base font-bold "
-                                                )}
-                                            >
+                                            <Text style={styles[font14]}>
                                                 ( {questionsList[type].marks} )
                                             </Text>
                                         </View>
@@ -83,6 +94,7 @@ export default function PDFPreview({
                                                 index={index}
                                                 showAnswers={showAnswers}
                                                 type={type}
+                                                style14={styles[font14]}
                                             />
                                         )
                                     )}

@@ -24,18 +24,12 @@ Font.register({
 
 // Define styles using the registered font
 export const styles = StyleSheet.create({
-    gujarati: {
-        fontFamily: "LohitGujarati",
-        fontSize: 12,
-    },
-    hindi: {
-        fontFamily: "Devnagari",
-        fontSize: 12,
-    },
+    eng14: { fontSize: 14 },
+    guj14: { fontFamily: "LohitGujarati", fontSize: 14 },
+    hin14: { fontFamily: "Devnagari", fontSize: 14 },
 });
 
 export default function PDFPreview({
-    gujaratiFont,
     headerDetails,
     questionsList,
     showAnswers,
@@ -48,6 +42,13 @@ export default function PDFPreview({
         "short",
         "long",
     ];
+
+    const font14 =
+        headerDetails?.subject.toLowerCase() === "hindi"
+            ? "hin14"
+            : headerDetails?.subject.toLowerCase() === "gujarati"
+            ? "guj14"
+            : "eng14";
 
     let characterIndex = 0;
     return (
@@ -83,23 +84,10 @@ export default function PDFPreview({
                                             >
                                                 {character} )
                                             </Text>
-                                            <Text
-                                                style={tw(
-                                                    "text-[19px] text-lg font-serif font-bold "
-                                                )}
-                                            >
+                                            <Text style={styles[font14]}>
                                                 {questionsList[type].title}
                                             </Text>
                                         </View>
-                                        {/* <View>
-                                            <Text
-                                                style={tw(
-                                                    " text-base font-bold "
-                                                )}
-                                            >
-                                                ( {questionsList[type].marks} )
-                                            </Text>
-                                        </View> */}
                                     </View>
                                     {questionsList[type].questions.map(
                                         (question, index) => (
@@ -110,6 +98,7 @@ export default function PDFPreview({
                                                 isPaper={true}
                                                 type={type}
                                                 showAnswers={showAnswers}
+                                                style14={styles[font14]}
                                             />
                                         )
                                     )}
