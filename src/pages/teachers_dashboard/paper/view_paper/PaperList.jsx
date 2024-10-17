@@ -47,7 +47,7 @@ const PaperList = ({ goNext, goLast }) => {
   };
 
   return (
-    <div className=" grid grid-cols-[auto_1fr] gap-2 mb-4">
+    <div className=" grid grid-cols-1 md:grid-cols-[auto_1fr] gap-2 mb-4">
       {data?.history.length === 0 ? (
         <div className="col-span-2 flex justify-center items-center h-48">
           <p className="text-lg text-gray-600">No Papers Available!</p>
