@@ -15,13 +15,16 @@ const Header = () => {
         <div className=" flex items-center justify-between">
           <div>
             <Link to="/">
-              <img className=" h-12 sm:h-14" src="/logos/Nexus Logo png-01.png" />
+              <img
+                className=" h-12 sm:h-14"
+                src="/logos/Nexus Logo png-01.png"
+              />
             </Link>
           </div>
-          <div className="hidden md:flex items-center gap-3 ">
+          <div className="hidden md:flex items-center gap-3">
             <DesktopLinks />
           </div>
-          <div className="md:hidden flex items-center gap-3 ">
+          <div className="md:hidden flex items-center gap-3">
             <MobileLinks />
           </div>
         </div>
