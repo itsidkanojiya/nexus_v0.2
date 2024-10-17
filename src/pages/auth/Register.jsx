@@ -7,12 +7,15 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import AppButton from "../../components/buttons/AppButton";
 import SelectBox from "../../components/inputs/SelectBox";
-import { standards } from "../../constants/useFullData";
+import { standards, subjects } from "../../constants/useFullData";
 import RadioBox from "../../components/inputs/RadioBox";
+import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
     const [showPass, setShowPass] = useState(false);
     const [showVerifyOtp, setShowConfirmPass] = useState(false);
+    const [email, setEmail] = useState("");
 
     const schema = yup
         .object({
@@ -27,6 +30,7 @@ export default function Register() {
                 .required("Contact Number is required"),
             user_type: yup.string().required("User type is required"),
             std: yup.string().required("Please select an option"),
+            sub: yup.string().required("Please select subject"),
             school: yup.string().required("School Name is required"),
             password: yup
                 .string()
@@ -43,14 +47,39 @@ export default function Register() {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data) => {
+        try {
+            const response = await fetch(
+                "https://backend.nexuspublication.com/api/register",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const result = await response.json();
+            if (result?.is_verified) {
+            } else {
+                setEmail(data.email);
+                setShowConfirmPass(true);
+            }
+            console.log(result); // Handle the response as needed
+        } catch (error) {
+            console.error("Error during registration:", error);
+        }
     };
 
     return (
         <>
             {showVerifyOtp ? (
-                <VerifyOTP />
+                <VerifyOTP email={email} />
             ) : (
                 <div className="min-h-96 py-8 flex items-center justify-center px-2">
                     <div className="max-w-md mx-auto bg-white shadow-md rounded-md w-full p-4 md:p-8 space-y-6">
@@ -137,8 +166,20 @@ export default function Register() {
                                     value: standard,
                                     label: `Standard ${standard}`,
                                 }))}
-                                placeholder="Select an option"
+                                placeholder="Select Standard"
                             />
+                            <SelectBox
+                                register={register}
+                                errors={errors}
+                                label="Choose Subject"
+                                name="sub"
+                                options={subjects.map((sub) => ({
+                                    value: sub.name,
+                                    label: sub.name,
+                                }))}
+                                placeholder="Select Subject"
+                            />
+
                             <InputBox
                                 register={register}
                                 errors={errors}
@@ -179,7 +220,9 @@ export default function Register() {
     );
 }
 
-export function VerifyOTP() {
+export function VerifyOTP({ email }) {
+    const { token, loading, login } = useAuth();
+    const navigate = useNavigate();
     const schema = yup
         .object({
             otp: yup
@@ -196,9 +239,37 @@ export function VerifyOTP() {
     } = useForm({
         resolver: yupResolver(schema),
     });
+    const onSubmit = async (data) => {
+        try {
+            const response = await fetch(
+                "https://backend.nexuspublication.com/api/verify-otp",
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                    },
+                    body: new URLSearchParams({
+                        email,
+                        otp: data.otp,
+                    }),
+                }
+            );
 
-    const onSubmit = (data) => {
-        console.log(data);
+            if (!response.ok) {
+                toast.error("Invalid OTP!");
+                throw new Error("Failed to verify OTP");
+            }
+
+            const result = await response.json();
+            console.log("OTP Verified", result);
+
+            login(result.token, result.user);
+            navigate("/");
+            // Handle success (e.g., navigate to the next page or show a success message)
+        } catch (error) {
+            console.error("Error verifying OTP:", error);
+            // Handle error (e.g., show error message)
+        }
     };
 
     return (

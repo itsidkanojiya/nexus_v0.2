@@ -8,6 +8,53 @@ function generateArray(num) {
 
 export const standards = generateArray(12);
 
+export const subjects = [
+    {
+        id: 1,
+        name: "English",
+    },
+    {
+        id: 2,
+        name: "Gujarati",
+    },
+    {
+        id: 3,
+        name: "Hindi",
+    },
+    {
+        id: 4,
+        name: "Mathematics",
+    },
+    {
+        id: 5,
+        name: "Science ",
+    },
+    {
+        id: 6,
+        name: "Sanskrit ",
+    },
+    {
+        id: 7,
+        name: "Social science ",
+    },
+    {
+        id: 8,
+        name: "Environmental Studies",
+    },
+    {
+        id: 9,
+        name: "Arts",
+    },
+    {
+        id: 10,
+        name: "Health and Physical Education",
+    },
+    {
+        id: 11,
+        name: "Vocational Education",
+    },
+];
+
 export const questionsType = [
     { name: "MCQ", value: "mcq" },
     {
