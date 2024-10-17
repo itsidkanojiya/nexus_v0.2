@@ -11,11 +11,13 @@ import { standards, subjects } from "../../constants/useFullData";
 import RadioBox from "../../components/inputs/RadioBox";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function Register() {
     const [showPass, setShowPass] = useState(false);
     const [showVerifyOtp, setShowConfirmPass] = useState(false);
     const [email, setEmail] = useState("");
+    const [userType, setUserType] = useState("student");
 
     const schema = yup
         .object({
@@ -29,8 +31,14 @@ export default function Register() {
                 .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
                 .required("Contact Number is required"),
             user_type: yup.string().required("User type is required"),
-            std: yup.string().required("Please select an option"),
-            sub: yup.string().required("Please select subject"),
+            std:
+                userType === "student"
+                    ? yup.string().required("Please select an option")
+                    : null,
+            sub:
+                userType === "teacher"
+                    ? yup.string().required("Please select subject")
+                    : null,
             school: yup.string().required("School Name is required"),
             password: yup
                 .string()
@@ -60,11 +68,13 @@ export default function Register() {
                 }
             );
 
+            const result = await response.json();
             if (!response.ok) {
+                console.log(result);
+                toast.error(result.message);
                 throw new Error("Network response was not ok");
             }
 
-            const result = await response.json();
             if (result?.is_verified) {
             } else {
                 setEmail(data.email);
@@ -122,63 +132,87 @@ export default function Register() {
                             />
                             <div>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <RadioBox
-                                        register={register}
-                                        errors={errors}
-                                        id="student"
-                                        icon={
-                                            <img
-                                                src="/icons/student.png"
-                                                alt="Student"
-                                            />
-                                        }
-                                        name="user_type"
-                                        value="student"
-                                        label="User Type"
-                                    />
-                                    <RadioBox
-                                        register={register}
-                                        errors={errors}
-                                        id="teacher"
-                                        icon={
-                                            <img
-                                                src="/icons/teacher.png"
-                                                alt="Teacher"
-                                            />
-                                        }
-                                        name="user_type"
-                                        value="teacher"
-                                        label="User Type"
-                                    />
+                                    <div
+                                        onClick={() => {
+                                            setUserType("student");
+                                        }}
+                                    >
+                                        <RadioBox
+                                            register={register}
+                                            errors={errors}
+                                            id="student"
+                                            icon={
+                                                <img
+                                                    src="/icons/student.png"
+                                                    alt="Student"
+                                                />
+                                            }
+                                            name="user_type"
+                                            value="student"
+                                            label="User Type"
+                                            onChange={(e) => {
+                                                setUserType(e.target.value); // Update local state
+                                            }}
+                                        />
+                                    </div>
+                                    <div
+                                        onClick={() => {
+                                            setUserType("teacher");
+                                        }}
+                                    >
+                                        <RadioBox
+                                            register={register}
+                                            errors={errors}
+                                            id="teacher"
+                                            icon={
+                                                <img
+                                                    src="/icons/teacher.png"
+                                                    alt="Teacher"
+                                                />
+                                            }
+                                            name="user_type"
+                                            value="teacher"
+                                            label="User Type"
+                                            onChange={(e) => {
+                                                setUserType(e.target.value); // Update local state
+                                            }}
+                                        />{" "}
+                                    </div>
                                 </div>
                                 {errors?.user_type && (
-                                    <p className=" text-red-600 text-sm font-semibold">
+                                    <p className="text-red-600 text-sm font-semibold">
                                         {errors?.user_type?.message}
                                     </p>
                                 )}
                             </div>
-                            <SelectBox
-                                register={register}
-                                errors={errors}
-                                label="Choose an Option"
-                                name="std"
-                                options={standards.map((standard) => ({
-                                    value: standard,
-                                    label: `Standard ${standard}`,
-                                }))}
-                                placeholder="Select Standard"
-                            />
-                            <SelectBox
-                                register={register}
-                                errors={errors}
-                                label="Choose Subject"
-                                name="sub"
-                                options={subjects.map((sub) => ({
-                                    value: sub.name,
-                                    label: sub.name,
-                                }))}
-                                placeholder="Select Subject"
-                            />
+
+                            {userType === "student" && (
+                                <SelectBox
+                                    register={register}
+                                    errors={errors}
+                                    label="Choose Standard"
+                                    name="std"
+                                    options={standards.map((standard) => ({
+                                        value: standard,
+                                        label: `Standard ${standard}`,
+                                    }))}
+                                    placeholder="Select Standard"
+                                />
+                            )}
+
+                            {userType === "teacher" && (
+                                <SelectBox
+                                    register={register}
+                                    errors={errors}
+                                    label="Choose Subject"
+                                    name="sub"
+                                    options={subjects.map((sub) => ({
+                                        value: sub.name,
+                                        label: sub.name,
+                                    }))}
+                                    placeholder="Select Subject"
+                                />
+                            )}
 
                             <InputBox
                                 register={register}
