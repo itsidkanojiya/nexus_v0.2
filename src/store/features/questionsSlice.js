@@ -128,7 +128,7 @@ export const getSelectedQuestionsWithDetails = (state) => {
     const selectedTitles =
         state.language === "hindi"
             ? hindiTitles
-            : state.language === "english"
+            : state.language === "gujarati"
             ? gujaratiTitles
             : titles;
 
