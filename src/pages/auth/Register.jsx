@@ -7,12 +7,17 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import AppButton from "../../components/buttons/AppButton";
 import SelectBox from "../../components/inputs/SelectBox";
-import { standards } from "../../constants/useFullData";
+import { standards, subjects } from "../../constants/useFullData";
 import RadioBox from "../../components/inputs/RadioBox";
+import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function Register() {
     const [showPass, setShowPass] = useState(false);
     const [showVerifyOtp, setShowConfirmPass] = useState(false);
+    const [email, setEmail] = useState("");
+    const [userType, setUserType] = useState("student");
 
     const schema = yup
         .object({
@@ -26,7 +31,14 @@ export default function Register() {
                 .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
                 .required("Contact Number is required"),
             user_type: yup.string().required("User type is required"),
-            std: yup.string().required("Please select an option"),
+            std:
+                userType === "student"
+                    ? yup.string().required("Please select an option")
+                    : null,
+            sub:
+                userType === "teacher"
+                    ? yup.string().required("Please select subject")
+                    : null,
             school: yup.string().required("School Name is required"),
             password: yup
                 .string()
@@ -43,14 +55,41 @@ export default function Register() {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data) => {
+        try {
+            const response = await fetch(
+                "https://backend.nexuspublication.com/api/register",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                }
+            );
+
+            const result = await response.json();
+            if (!response.ok) {
+                console.log(result);
+                toast.error(result.message);
+                throw new Error("Network response was not ok");
+            }
+
+            if (result?.is_verified) {
+            } else {
+                setEmail(data.email);
+                setShowConfirmPass(true);
+            }
+            console.log(result); // Handle the response as needed
+        } catch (error) {
+            console.error("Error during registration:", error);
+        }
     };
 
     return (
         <>
             {showVerifyOtp ? (
-                <VerifyOTP />
+                <VerifyOTP email={email} />
             ) : (
                 <div className="min-h-96 py-8 flex items-center justify-center px-2">
                     <div className="max-w-md mx-auto bg-white shadow-md rounded-md w-full p-4 md:p-8 space-y-6">
@@ -93,52 +132,88 @@ export default function Register() {
                             />
                             <div>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <RadioBox
-                                        register={register}
-                                        errors={errors}
-                                        id="student"
-                                        icon={
-                                            <img
-                                                src="/icons/student.png"
-                                                alt="Student"
-                                            />
-                                        }
-                                        name="user_type"
-                                        value="student"
-                                        label="User Type"
-                                    />
-                                    <RadioBox
-                                        register={register}
-                                        errors={errors}
-                                        id="teacher"
-                                        icon={
-                                            <img
-                                                src="/icons/teacher.png"
-                                                alt="Teacher"
-                                            />
-                                        }
-                                        name="user_type"
-                                        value="teacher"
-                                        label="User Type"
-                                    />
+                                    <div
+                                        onClick={() => {
+                                            setUserType("student");
+                                        }}
+                                    >
+                                        <RadioBox
+                                            register={register}
+                                            errors={errors}
+                                            id="student"
+                                            icon={
+                                                <img
+                                                    src="/icons/student.png"
+                                                    alt="Student"
+                                                />
+                                            }
+                                            name="user_type"
+                                            value="student"
+                                            label="User Type"
+                                            onChange={(e) => {
+                                                setUserType(e.target.value); // Update local state
+                                            }}
+                                        />
+                                    </div>
+                                    <div
+                                        onClick={() => {
+                                            setUserType("teacher");
+                                        }}
+                                    >
+                                        <RadioBox
+                                            register={register}
+                                            errors={errors}
+                                            id="teacher"
+                                            icon={
+                                                <img
+                                                    src="/icons/teacher.png"
+                                                    alt="Teacher"
+                                                />
+                                            }
+                                            name="user_type"
+                                            value="teacher"
+                                            label="User Type"
+                                            onChange={(e) => {
+                                                setUserType(e.target.value); // Update local state
+                                            }}
+                                        />{" "}
+                                    </div>
                                 </div>
                                 {errors?.user_type && (
-                                    <p className=" text-red-600 text-sm font-semibold">
+                                    <p className="text-red-600 text-sm font-semibold">
                                         {errors?.user_type?.message}
                                     </p>
                                 )}
                             </div>
-                            <SelectBox
-                                register={register}
-                                errors={errors}
-                                label="Choose an Option"
-                                name="std"
-                                options={standards.map((standard) => ({
-                                    value: standard,
-                                    label: `Standard ${standard}`,
-                                }))}
-                                placeholder="Select an option"
-                            />
+
+                            {userType === "student" && (
+                                <SelectBox
+                                    register={register}
+                                    errors={errors}
+                                    label="Choose Standard"
+                                    name="std"
+                                    options={standards.map((standard) => ({
+                                        value: standard,
+                                        label: `Standard ${standard}`,
+                                    }))}
+                                    placeholder="Select Standard"
+                                />
+                            )}
+
+                            {userType === "teacher" && (
+                                <SelectBox
+                                    register={register}
+                                    errors={errors}
+                                    label="Choose Subject"
+                                    name="sub"
+                                    options={subjects.map((sub) => ({
+                                        value: sub.name,
+                                        label: sub.name,
+                                    }))}
+                                    placeholder="Select Subject"
+                                />
+                            )}
+
                             <InputBox
                                 register={register}
                                 errors={errors}
@@ -179,7 +254,9 @@ export default function Register() {
     );
 }
 
-export function VerifyOTP() {
+export function VerifyOTP({ email }) {
+    const { token, loading, login } = useAuth();
+    const navigate = useNavigate();
     const schema = yup
         .object({
             otp: yup
@@ -196,9 +273,37 @@ export function VerifyOTP() {
     } = useForm({
         resolver: yupResolver(schema),
     });
+    const onSubmit = async (data) => {
+        try {
+            const response = await fetch(
+                "https://backend.nexuspublication.com/api/verify-otp",
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                    },
+                    body: new URLSearchParams({
+                        email,
+                        otp: data.otp,
+                    }),
+                }
+            );
 
-    const onSubmit = (data) => {
-        console.log(data);
+            if (!response.ok) {
+                toast.error("Invalid OTP!");
+                throw new Error("Failed to verify OTP");
+            }
+
+            const result = await response.json();
+            console.log("OTP Verified", result);
+
+            login(result.token, result.user);
+            navigate("/");
+            // Handle success (e.g., navigate to the next page or show a success message)
+        } catch (error) {
+            console.error("Error verifying OTP:", error);
+            // Handle error (e.g., show error message)
+        }
     };
 
     return (

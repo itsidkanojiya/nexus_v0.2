@@ -110,7 +110,6 @@ const Login = () => {
                         <p className=" text-xs text-center">
                             Create new account?
                             <Link to="/sing-up" className=" underline">
-                                {" "}
                                 sing up
                             </Link>
                         </p>
