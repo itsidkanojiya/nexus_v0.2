@@ -12,125 +12,125 @@ import { usePaperStore } from "../../../../zustand/store";
 import { useState } from "react";
 
 const PaperPreview = ({
-    step = null,
-    goNext = () => {},
-    goPrev = () => {},
+  step = null,
+  goNext = () => {},
+  goPrev = () => {},
 }) => {
-    const { token, user } = useAuth();
-    const paperQuestions = useSelector((state) =>
-        getSelectedQuestionsWithDetails(state?.questions)
-    );
-    const paper = usePaperStore((state) => state.paper);
-    const dispatch = useDispatch();
-    const [showAnswers, setShowAnswers] = useState(false);
+  const { token, user } = useAuth();
+  const paperQuestions = useSelector((state) =>
+    getSelectedQuestionsWithDetails(state?.questions)
+  );
+  const paper = usePaperStore((state) => state.paper);
+  const dispatch = useDispatch();
+  const [showAnswers, setShowAnswers] = useState(false);
 
-    const { formDatatoken } = useAuth();
+  const { formDatatoken } = useAuth();
 
-    //   Submit Paper
+  //   Submit Paper
 
-    const { mutateAsync: addQuestions, isPending } = useMutation({
-        mutationFn: (data) =>
-            updateData("add-paper-questions", data, token, "POST", true),
-        onSuccess: (data) => {
-            toast.success(data?.message);
-            console.log(data);
-        },
-        onError: (error) => {
-            toast.error(error?.message);
-            console.log(error);
-        },
-    });
+  const { mutateAsync: addQuestions, isPending } = useMutation({
+    mutationFn: (data) =>
+      updateData("add-paper-questions", data, token, "POST", true),
+    onSuccess: (data) => {
+      toast.success(data?.message);
+      console.log(data);
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+      console.log(error);
+    },
+  });
 
-    const handleSubmit = async () => {
-        const outputData = {
-            questions: [],
-            id: paper?.id,
-        };
-
-        // Iterate over each key in the input data
-        for (const [key, value] of Object.entries(paperQuestions)) {
-            // Extract question IDs and marks for each section
-            const questionIds = value.questions.map((q) => q.id);
-            const marks = value.marks;
-
-            // Create the section object dynamically
-            const section = {};
-            section[key] = {
-                question: questionIds,
-                marks: parseInt(marks, 10), // Convert marks to an integer if it's a string
-            };
-
-            // Add the section to the output questions array
-            outputData.questions.push(section);
-        }
-        await addQuestions(outputData);
+  const handleSubmit = async () => {
+    const outputData = {
+      questions: [],
+      id: paper?.id,
     };
 
-    return (
-        <div className="w-full">
-            <div className=" flex justify-between items-center">
-                <AppButton
-                    type="button"
-                    onClick={() => goPrev()}
-                    className=" bg-red-600 text-sm mb-2"
-                >
-                    Go Back
-                </AppButton>
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={showAnswers}
-                        onChange={(event) => {
-                            setShowAnswers(event.target.checked);
-                        }}
-                    />
-                    {"  "}Show Answers
-                </label>
-            </div>
-            <div className=" flex items-center justify-center">
-                {isPending ? (
-                    <div className=" h-14 w-full animate-pulse bg-slate-300 "></div>
-                ) : (
-                    <div
-                        onClick={handleSubmit}
-                        className="text-white hover:text-blue-200 w-[100%] mx-auto text-center bg-red-600 p-2 cursor-pointer"
-                    >
-                        Save
-                    </div>
-                )}
-                {isPending ? (
-                    <div className=" h-14 w-full animate-pulse bg-slate-300"></div>
-                ) : (
-                    <PDFDownloadLink
-                        onClick={handleSubmit}
-                        document={
-                            <PDFPreview
-                                showAnswers={showAnswers}
-                                headerDetails={paper}
-                                questionsList={paperQuestions}
-                            />
-                        }
-                        fileName="nexusPaper.pdf"
-                        className="p-2 bg-red-600 w-full text-center text-white hover:text-blue-200  font-semibold mb-0"
-                        style={{ width: "100%" }}
-                    >
-                        {({ loading }) =>
-                            loading ? "Loading document..." : "Download now!"
-                        }
-                    </PDFDownloadLink>
-                )}
-            </div>
-            <div className="">
-                <PDFViewer className="w-full min-h-[600px]" showToolbar={false}>
-                    <PDFPreview
-                        showAnswers={showAnswers}
-                        headerDetails={paper}
-                        questionsList={paperQuestions}
-                    />
-                </PDFViewer>
-            </div>
-        </div>
-    );
+    // Iterate over each key in the input data
+    for (const [key, value] of Object.entries(paperQuestions)) {
+      // Extract question IDs and marks for each section
+      const questionIds = value.questions.map((q) => q.id);
+      const marks = value.marks;
+
+      // Create the section object dynamically
+      const section = {};
+      section[key] = {
+        question: questionIds,
+        marks: parseInt(marks, 10), // Convert marks to an integer if it's a string
+      };
+
+      // Add the section to the output questions array
+      outputData.questions.push(section);
+    }
+    await addQuestions(outputData);
+  };
+
+  return (
+    <div className="w-full">
+      <div className=" flex justify-between items-center">
+        <AppButton
+          type="button"
+          onClick={() => goPrev()}
+          className=" bg-red-600 text-sm mb-2"
+        >
+          Go Back
+        </AppButton>
+        <label>
+          <input
+            type="checkbox"
+            checked={showAnswers}
+            onChange={(event) => {
+              setShowAnswers(event.target.checked);
+            }}
+          />
+          {"  "}Show Answers
+        </label>
+      </div>
+      <div className=" flex items-center justify-center">
+        {isPending ? (
+          <div className=" h-14 w-full animate-pulse bg-slate-300 "></div>
+        ) : (
+          <div
+            onClick={handleSubmit}
+            className="text-white hover:text-blue-200 w-[100%] mx-auto text-center bg-red-600 p-2 cursor-pointer"
+          >
+            Save
+          </div>
+        )}
+        {isPending ? (
+          <div className=" h-14 w-full animate-pulse bg-slate-300"></div>
+        ) : (
+          <PDFDownloadLink
+            onClick={handleSubmit}
+            document={
+              <PDFPreview
+                showAnswers={showAnswers}
+                headerDetails={paper}
+                questionsList={paperQuestions}
+              />
+            }
+            fileName="nexusPaper.pdf"
+            className="p-2 bg-red-600 w-full text-center text-white hover:text-blue-200  font-semibold mb-0"
+            style={{ width: "100%" }}
+          >
+            {({ loading }) =>
+              loading ? "Loading document..." : "Download now!"
+            }
+          </PDFDownloadLink>
+        )}
+      </div>
+      <div className="">
+        <PDFViewer className="w-full min-h-[600px]" showToolbar={false}>
+          <PDFPreview
+            showAnswers={showAnswers}
+            headerDetails={paper}
+            questionsList={paperQuestions}
+          />
+        </PDFViewer>
+      </div>
+    </div>
+  );
 };
 
 export default PaperPreview;

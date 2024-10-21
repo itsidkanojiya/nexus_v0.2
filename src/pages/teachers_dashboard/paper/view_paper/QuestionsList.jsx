@@ -99,7 +99,7 @@ export default function QuestionsList({ goNext, goPrev }) {
           </AppButton>
         )}
       </div>
-      <div className="grid lg:grid-cols-[auto_1fr_1fr] gap-2 mb-4">
+      <div className=" grid grid-cols-[auto_1fr_1fr] gap-2 mb-4">
         <GetQuestionType handleChange={changeQuestionType} />
         <GetChapter handleChange={changeChapter} />
         <InputBox
