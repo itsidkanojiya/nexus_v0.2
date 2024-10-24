@@ -8,6 +8,7 @@ import useAuth from "../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import ViewProfileDialog from "./ViewProfileDialog";
 import EditProfileDialog from "./EditProfileDialog";
+import LogoutButton from "../../components/logout_button/LogoutButton";
 
 const MobileLinks = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -86,17 +87,22 @@ const MobileLinks = () => {
           />
           {/* User Section: Profile or Login */}
           {user ? (
-            <div className="flex justify-center">
-              <button
-                className="flex items-center"
-                onClick={() => {
-                  setShowViewProfile(true);
-                  toggleMenu();
-                }}
-              >
-                <FaUserCircle className="text-3xl text-slate-600" />
-                <span className="ml-2">View Profile</span>
-              </button>
+            <div className="flex justify-around">
+              <div>
+                <button
+                  className="flex items-center"
+                  onClick={() => {
+                    setShowViewProfile(true);
+                    toggleMenu();
+                  }}
+                >
+                  <FaUserCircle className="text-3xl text-slate-600" />
+                  <span className="ml-2">View Profile</span>
+                </button>
+              </div>
+              <div>
+                <LogoutButton />
+              </div>
             </div>
           ) : (
             <AppNavLink

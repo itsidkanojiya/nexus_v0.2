@@ -6,8 +6,8 @@ import { SiMinutemailer } from "react-icons/si";
 const Footer = () => {
   return (
     <div className="bg-tertiary">
-      <div className=" w-full bg-secondary flex justify-between items-center py-2 md:px-2">
-        <AppContainer className=" flex flex-col xs:flex-row justify-between items-center gap-2">
+      {/*  <div className=" w-full bg-secondary flex justify-between items-center py-2 md:px-2">
+       <AppContainer className=" flex flex-col xs:flex-row justify-between items-center gap-2">
           <div>
             <p className=" text-white text-xl tracking-wide text-center xs:text-start">
               NEWSLETTER
@@ -27,8 +27,8 @@ const Footer = () => {
               <SiMinutemailer className=" text-xl " />
             </button>
           </div>
-        </AppContainer>
-      </div>
+        </AppContainer> 
+      </div>*/}
       <AppContainer>
         <div className="flex flex-col items-center justify-between gap-4 border-t border-b py-6 lg:flex-row md:px-4">
           {/* <!-- nav - start --> */}
