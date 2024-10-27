@@ -17,8 +17,8 @@ import SerachBox from "../../../components/serach_box/SerachBox";
 import ErrorMessage from "../../../components/error_message/ErrorMessage";
 import AppLoader from "../../../components/loader/AppLoader";
 import BookCard from "../../../components/book_card/BookCard";
-import GetBoards from "../../../components/get_boards/GetBoards";
 import Breadcrumb from "../../../components/breadcrumb/Breadcrumb";
+import FilteredGetBoards from "../../../components/get_boards/StateBoard";
 
 export default function StateBoardBooks() {
   const dispatch = useDispatch();
@@ -77,7 +77,7 @@ export default function StateBoardBooks() {
                     <GetSubjects handleChange={handleSubjectChange} />
                 </div> */}
         <div className="col-span-3 sm:col-auto">
-          <GetBoards validate={true} handleChange={handleBoardChange} />
+          <FilteredGetBoards validate={true} handleChange={handleBoardChange} />
         </div>
         <div className=" col-span-3 md:col-auto">
           <SerachBox

@@ -18,6 +18,7 @@ import ErrorMessage from "../../../components/error_message/ErrorMessage";
 import AppLoader from "../../../components/loader/AppLoader";
 import BookCard from "../../../components/book_card/BookCard";
 import { standards, subjects } from "../../../components/constants/data";
+import FilteredGetBoards from "../../../components/get_boards/StateBoard";
 
 export default function StateBoardBooksSolution() {
   const dispatch = useDispatch();
@@ -63,12 +64,20 @@ export default function StateBoardBooksSolution() {
               </option>
             ))}
           </SelectBox>
+        </div>    <div>
+          <SelectBox handleChange={handleSubjectChange}>
+            {subjects?.map((subject) => (
+              <option key={subject} value={subject}>
+                {subject}
+              </option>
+            ))}
+          </SelectBox>
         </div>
-        <div className="col-span-2 sm:col-auto">
+        {/* <div className="col-span-2 sm:col-auto">
           <GetSubjects handleChange={handleSubjectChange} />
-        </div>
+        </div> */}
         <div className="col-span-3 sm:col-auto">
-          <GetBoards validate={true} handleChange={handleBoardChange} />
+          <FilteredGetBoards validate={true} handleChange={handleBoardChange} />
         </div>
         <div className=" col-span-3 md:col-auto">
           <SerachBox

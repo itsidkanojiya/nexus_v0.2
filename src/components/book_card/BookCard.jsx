@@ -56,14 +56,8 @@ export default function BookCard({ book }) {
                     <FaEye className="text-2xl" />
                     <p>View Book</p>
                 </div>
-            </div>
-            {!showBook ? (
-                <BlockBookView
-                    onClose={onClose}
-                    onOpen={onOpen}
-                    isOpen={isOpen}
-                />
-            ) : (
+            </div>  
+            { (
                 <PDFModal
                     title={book?.chapter_name}
                     onClose={onClose}
