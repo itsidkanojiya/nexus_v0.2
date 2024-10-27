@@ -34,7 +34,7 @@ const PdfViewer = ({ file }) => {
     };
 
     return (
-        <div className="border p-4 space-y-2 w-fit">
+        <div className="p-0 m-0 w-fit"> {/* Remove padding and margin */}
             {isLoading && !error && <l-ring size="60" color="coral" />}
             {error && <p className="text-red-500">Failed to load PDF document.</p>}
             
@@ -51,6 +51,7 @@ const PdfViewer = ({ file }) => {
                             pageNumber={pageNumber}
                             renderTextLayer={false}
                             renderAnnotationLayer={false}
+                            className="m-0 p-0" // Remove margins and paddings
                         />
                     )}
                 </Document>
