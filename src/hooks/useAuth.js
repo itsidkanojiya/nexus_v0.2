@@ -4,8 +4,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { setLogin } from "../store/features/appSlice";
 
 const useAuth = (redirectToLogin = false) => {
-  const [token, setToken] = useState(() => localStorage.getItem("nexusToken") || null);
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("nexusUser")) || null);
+  const [token, setToken] = useState(
+    () => localStorage.getItem("nexusToken") || null
+  );
+  const [user, setUser] = useState(
+    () => JSON.parse(localStorage.getItem("nexusUser")) || null
+  );
   const { isLogin } = useSelector((state) => state.app);
   const navigate = useNavigate();
 
@@ -47,6 +51,7 @@ const useAuth = (redirectToLogin = false) => {
     setUser(null);
     dispatch(setLogin(false));
     navigate("/");
+    window.location.reload();
   };
 
   return { token, loading, user, login, logout };
