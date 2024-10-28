@@ -15,7 +15,8 @@ import SerachBox from "../../../components/serach_box/SerachBox";
 import ErrorMessage from "../../../components/error_message/ErrorMessage";
 import AppLoader from "../../../components/loader/AppLoader";
 import BookCard from "../../../components/book_card/BookCard";
-import { standards, subjects } from "../../../components/constants/data";
+import { standards } from "../../../components/constants/data";
+import { subjects } from "../../../constants/useFullData";
 
 export default function NcertBooksSolution() {
   const dispatch = useDispatch();
@@ -57,8 +58,8 @@ export default function NcertBooksSolution() {
         <div>
           <SelectBox handleChange={handleSubjectChange}>
             {subjects?.map((subject) => (
-              <option key={subject} value={subject}>
-                {subject}
+              <option key={subject.name} value={subject.name}>
+                {subject.name}
               </option>
             ))}
           </SelectBox>

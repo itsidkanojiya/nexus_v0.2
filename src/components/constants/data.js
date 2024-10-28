@@ -28,4 +28,4 @@ export const days = [
   "Saturday",
 ];
 
-export const subjects = ["English", "Hindi", "Gujarati"];
+

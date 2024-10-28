@@ -11,7 +11,7 @@ import {
 } from "./stateBoardBooksSlice";
 import ContainerBox from "../../../components/ContainerBox";
 import SelectBox from "../../../components/select_box/SelectBox";
-import { standards, subjects } from "../../../components/constants/data";
+import { standards } from "../../../components/constants/data";
 import GetSubjects from "../../../components/get_subjects/GetSubjects";
 import SerachBox from "../../../components/serach_box/SerachBox";
 import ErrorMessage from "../../../components/error_message/ErrorMessage";
@@ -19,7 +19,7 @@ import AppLoader from "../../../components/loader/AppLoader";
 import BookCard from "../../../components/book_card/BookCard";
 import Breadcrumb from "../../../components/breadcrumb/Breadcrumb";
 import FilteredGetBoards from "../../../components/get_boards/StateBoard";
-
+import { subjects } from "../../../constants/useFullData";
 export default function StateBoardBooks() {
   const dispatch = useDispatch();
   const { filtered_books } = useSelector((state) => state.stateBoardBooks);
@@ -65,10 +65,10 @@ export default function StateBoardBooks() {
           </SelectBox>
         </div>
         <div>
-          <SelectBox handleChange={handleSubjectChange}>
+        <SelectBox handleChange={handleSubjectChange}>
             {subjects?.map((subject) => (
-              <option key={subject} value={subject}>
-                {subject}
+              <option key={subject.name} value={subject.name}>
+                {subject.name}
               </option>
             ))}
           </SelectBox>

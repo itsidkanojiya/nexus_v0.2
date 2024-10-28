@@ -17,9 +17,9 @@ import SerachBox from "../../../components/serach_box/SerachBox";
 import ErrorMessage from "../../../components/error_message/ErrorMessage";
 import AppLoader from "../../../components/loader/AppLoader";
 import BookCard from "../../../components/book_card/BookCard";
-import { standards, subjects } from "../../../components/constants/data";
+import { standards } from "../../../components/constants/data";
 import FilteredGetBoards from "../../../components/get_boards/StateBoard";
-
+import { subjects } from "../../../constants/useFullData";
 export default function StateBoardBooksSolution() {
   const dispatch = useDispatch();
   const { filtered_books } = useSelector(
@@ -65,10 +65,10 @@ export default function StateBoardBooksSolution() {
             ))}
           </SelectBox>
         </div>    <div>
-          <SelectBox handleChange={handleSubjectChange}>
+        <SelectBox handleChange={handleSubjectChange}>
             {subjects?.map((subject) => (
-              <option key={subject} value={subject}>
-                {subject}
+              <option key={subject.name} value={subject.name}>
+                {subject.name}
               </option>
             ))}
           </SelectBox>

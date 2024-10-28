@@ -35,7 +35,7 @@ export default function Register() {
                 userType === "student"
                     ? yup.string().required("Please select an option")
                     : null,
-            sub:
+            subject:
                 userType === "teacher"
                     ? yup.string().required("Please select subject")
                     : null,
@@ -54,9 +54,10 @@ export default function Register() {
     } = useForm({
         resolver: yupResolver(schema),
     });
-
-    const onSubmit = async (data) => {
+  
+    const onSubmit = async (data) => {  console.log('Process start')
         try {
+            console.log(data)
             const response = await fetch(
                 "https://backend.nexuspublication.com/api/register",
                 {
@@ -65,7 +66,8 @@ export default function Register() {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(data),
-                }
+                },
+                console.log(data)
             );
 
             const result = await response.json();
@@ -195,17 +197,19 @@ export default function Register() {
                                     options={standards.map((standard) => ({
                                         value: standard,
                                         label: `Standard ${standard}`,
+                                        
                                     }))}
                                     placeholder="Select Standard"
                                 />
                             )}
 
                             {userType === "teacher" && (
+                               
                                 <SelectBox
-                                    register={register}
+                                    register={register} 
                                     errors={errors}
                                     label="Choose Subject"
-                                    name="sub"
+                                    name="subject"
                                     options={subjects.map((sub) => ({
                                         value: sub.name,
                                         label: sub.name,
@@ -241,7 +245,7 @@ export default function Register() {
                                     <Link to="/login" className="underline">
                                         Login
                                     </Link>
-                                </p>
+                                </p>    
                             </div>
                             <AppButton className="w-full" type="submit">
                                 Submit

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import ContainerBox from "../../../components/ContainerBox";
-import { standards, subjects } from "../../..//components/constants/data";
+import { standards } from "../../..//components/constants/data";
 import SelectBox from "../../../components/select_box/SelectBox";
 import GetSubjects from "../../../components/get_subjects/GetSubjects";
 import SerachBox from "../../../components/serach_box/SerachBox";
@@ -16,7 +16,7 @@ import {
 } from "./ncertBooksSlice"; // Adjust the import path as needed
 import AppLoader from "../../../components/loader/AppLoader";
 import ErrorMessage from "../../../components/error_message/ErrorMessage";
-
+import { subjects } from "../../../constants/useFullData";
 export default function NcertBooks() {
   const dispatch = useDispatch();
   const { filtered_books } = useSelector((state) => state.ncertBooks);
@@ -56,10 +56,10 @@ export default function NcertBooks() {
           </SelectBox>
         </div>
         <div>
-          <SelectBox handleChange={handleSubjectChange}>
+        <SelectBox handleChange={handleSubjectChange}>
             {subjects?.map((subject) => (
-              <option key={subject} value={subject}>
-                {subject}
+              <option key={subject.name} value={subject.name}>
+                {subject.name}
               </option>
             ))}
           </SelectBox>
