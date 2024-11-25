@@ -71,7 +71,7 @@ export default function NcertBooksSolution() {
           <SerachBox
             name="serach"
             handleSearch={handleSearch}
-            placeholder="Serach..."
+            placeholder="Search..."
           />
         </div>
       </div>

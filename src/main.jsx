@@ -10,11 +10,9 @@ import { store } from "./store/store.js";
 import { Toaster } from "react-hot-toast";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    "pdfjs-dist/build/pdf.worker.min.mjs",
-    import.meta.url
-).toString();
 
+pdfjs.GlobalWorkerOptions.workerSrc = 
+`//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 const queryClient = new QueryClient();
 
 const theme = extendTheme({

@@ -8,40 +8,77 @@ const stateBoardBooksSlice = createSlice({
     selected_standard: 1,
     selected_subject: null,
     selected_board: null,
-    search_Query: null,
+    search_query: null,
   },
   reducers: {
     setBooks: (state, action) => {
       state.books = action.payload;
-      state.filtered_books = state.books?.filter((book) => Number(book.std) === Number(state.selected_standard));
+      // Apply all active filters after books are set
+      state.filtered_books = state.books.filter(
+        (book) =>
+          Number(book.std) === Number(state.selected_standard) &&
+          (!state.selected_subject || book.name.toLowerCase() === state.selected_subject.toLowerCase()) &&
+          (!state.selected_board || book.board_name.toLowerCase() === state.selected_board.toLowerCase()) &&
+          (!state.search_query || 
+            book.name.toLowerCase().includes(state.search_query.toLowerCase()) ||
+            book.chapter_name.toLowerCase().includes(state.search_query.toLowerCase()))
+      );
     },
     setSelectedStandard: (state, action) => {
       state.selected_standard = action.payload;
-      state.filtered_books = state.books?.filter((book) => Number(book.std) === Number(action.payload));
+      // Apply all active filters when standard changes
+      state.filtered_books = state.books.filter(
+        (book) =>
+          Number(book.std) === Number(action.payload) &&
+          (!state.selected_subject || book.name.toLowerCase() === state.selected_subject.toLowerCase()) &&
+          (!state.selected_board || book.board_name.toLowerCase() === state.selected_board.toLowerCase()) &&
+          (!state.search_query || 
+            book.name.toLowerCase().includes(state.search_query.toLowerCase()) ||
+            book.chapter_name.toLowerCase().includes(state.search_query.toLowerCase()))
+      );
     },
     setSelectedSubject: (state, action) => {
-      if (action.payload == 0) {
-        state.filtered_books = state.books?.filter((book) => Number(book.std) === Number(state.selected_standard));
-      } else {
-        state.selected_subject = action.payload;
-        state.filtered_books = state.books?.filter((book) => book.name.toLowerCase() === action.payload.toLowerCase());
-      }
+      state.selected_subject = action.payload === 0 ? null : action.payload;
+      // Apply all active filters when subject changes
+      state.filtered_books = state.books.filter(
+        (book) =>
+          Number(book.std) === Number(state.selected_standard) &&
+          (!state.selected_subject || book.name.toLowerCase() === state.selected_subject.toLowerCase()) &&
+          (!state.selected_board || book.board_name.toLowerCase() === state.selected_board.toLowerCase()) &&
+          (!state.search_query || 
+            book.name.toLowerCase().includes(state.search_query.toLowerCase()) ||
+            book.chapter_name.toLowerCase().includes(state.search_query.toLowerCase()))
+      );
     },
     setBoard: (state, action) => {
-      if (action.payload == 0) {
-        state.filtered_books = state.books?.filter((book) => Number(book.std) === Number(state.selected_standard));
-      } else {
-        state.selected_board = action.payload;
-        state.filtered_books = state.books?.filter((book) => book.board_name.toLowerCase() === action.payload.toLowerCase());
-      }
+      state.selected_board = action.payload === 0 ? null : action.payload;
+      // Apply all active filters when board changes
+      state.filtered_books = state.books.filter(
+        (book) =>
+          Number(book.std) === Number(state.selected_standard) &&
+          (!state.selected_subject || book.name.toLowerCase() === state.selected_subject.toLowerCase()) &&
+          (!state.selected_board || book.board_name.toLowerCase() === state.selected_board.toLowerCase()) &&
+          (!state.search_query || 
+            book.name.toLowerCase().includes(state.search_query.toLowerCase()) ||
+            book.chapter_name.toLowerCase().includes(state.search_query.toLowerCase()))
+      );
     },
     setSearchQuery: (state, action) => {
-      state.search_Query = action.payload;
-      state.filtered_books = state.books?.filter((book) => book.name.toLowerCase().includes(action.payload.toLowerCase()) || book.chapter_name.toLowerCase().includes(action.payload.toLowerCase()));
+      state.search_query = action.payload;
+      // Apply all active filters when search query changes
+      state.filtered_books = state.books.filter(
+        (book) =>
+          Number(book.std) === Number(state.selected_standard) &&
+          (!state.selected_subject || book.name.toLowerCase() === state.selected_subject.toLowerCase()) &&
+          (!state.selected_board || book.board_name.toLowerCase() === state.selected_board.toLowerCase()) &&
+          (!state.search_query || 
+            book.name.toLowerCase().includes(state.search_query.toLowerCase()) ||
+            book.chapter_name.toLowerCase().includes(state.search_query.toLowerCase()))
+      );
     },
   },
 });
 
-export const { setSelectedStandard, setSelectedSubject, setSearchQuery, setBooks, setBoard } = stateBoardBooksSlice.actions;
+export const { setBooks, setSelectedStandard, setSelectedSubject, setSearchQuery, setBoard } = stateBoardBooksSlice.actions;
 
 export default stateBoardBooksSlice.reducer;

@@ -83,7 +83,7 @@ export default function StateBoardBooksSolution() {
           <SerachBox
             name="serach"
             handleSearch={handleSearch}
-            placeholder="Serach..."
+            placeholder="Search..."
           />
         </div>
       </div>
