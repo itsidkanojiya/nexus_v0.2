@@ -18,6 +18,7 @@ import AboutUs from "../pages/home/AboutUs";
 
 import Unverified from "../pages/Unverified";
 import Unauthorized from "../pages/Unauthorized";
+import ForgotPassword from "../pages/auth/ForgotPassword";
 const router = createBrowserRouter([
     {
       path: "/",
@@ -27,6 +28,8 @@ const router = createBrowserRouter([
         { path: "/aboutus", element: <AboutUs /> },
         { path: "/login", element: <Login /> },
         { path: "/sing-up", element: <Register /> },
+        { path: "/forgot-password", element: <ForgotPassword /> },
+        
         { path: "/ncert-books", element: <NcertBooks /> },
         { path: "/ncert-books-solution", element: <NcertBooksSolution /> },
         { path: "/state-board-books", element: <StateBoardBooks /> },

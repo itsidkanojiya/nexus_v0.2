@@ -106,6 +106,11 @@ const Login = () => {
                             setShowPass((prev) => !prev);
                         }}
                     />
+                     <div className="flex justify-end">
+            <Link to="/forgot-password" className="text-sm text-primary">
+              Forgot Password?
+            </Link>
+          </div>
                     <div>
                         <p className=" text-xs text-center">
                             Create new account?
