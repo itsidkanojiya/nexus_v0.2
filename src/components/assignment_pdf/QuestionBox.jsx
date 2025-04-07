@@ -37,7 +37,7 @@ const QuestionBox = ({
                                 style={tw("h-6 w-6 object-contain")}
                                 src="/img/checkbox.png"
                             />
-                            <Text style={style14}>{option}</Text>
+                            <Text style={style14}>{option}</Text> 
                         </View>
                     ))}
                 </View>

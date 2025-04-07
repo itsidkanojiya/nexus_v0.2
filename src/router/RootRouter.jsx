@@ -14,6 +14,7 @@ import NcertBooks from "../pages/ncert/ncert_books/NcertBooks";
 import NcertBooksSolution from "../pages/ncert/ncert_books_solution/NcertBooksSolution";
 import StateBoardBooks from "../pages/state_board/state_board_books/StateBoardBooks";
 import StateBoardBooksSolution from "../pages/state_board/state_board_books_solution/StateBoardBooksSolution";
+import SubjectChangeRequest from "../ui/header/changeSubject";
 import AboutUs from "../pages/home/AboutUs";
 
 import Unverified from "../pages/Unverified";
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
         { path: "/login", element: <Login /> },
         { path: "/sing-up", element: <Register /> },
         { path: "/forgot-password", element: <ForgotPassword /> },
-        
+        { path: "/request-subject-change", element: <SubjectChangeRequest /> },
         { path: "/ncert-books", element: <NcertBooks /> },
         { path: "/ncert-books-solution", element: <NcertBooksSolution /> },
         { path: "/state-board-books", element: <StateBoardBooks /> },

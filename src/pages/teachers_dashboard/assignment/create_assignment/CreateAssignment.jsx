@@ -28,6 +28,6 @@ const CreateAssignment = () => {
             {step === 2 && <PaperPreview goNext={goNext} goPrev={goPrev} />}
         </>
     );
-};
+};  
 
 export default CreateAssignment;

@@ -31,7 +31,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <ChakraProvider theme={theme}>
                 <QueryClientProvider client={queryClient}>
                     <RootRouter />
-                    <Toaster position="top-center" />
+                    <Toaster position="top
+                    
+                    
+                    center" />
                     <ReactQueryDevtools initialIsOpen={false} />
                 </QueryClientProvider>
             </ChakraProvider>

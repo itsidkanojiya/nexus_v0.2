@@ -26,7 +26,7 @@ import updateData from "../../../../helpers/updateData";
 
 export default function QuestionsList({ goNext, goPrev }) {
     const dispatch = useDispatch();
-    const { token } = useAuth();
+    const { token ,user} = useAuth();
     const { filteredQuestion, selectedQuestions } = useSelector(
         (state) => state.questions
     );
@@ -56,22 +56,28 @@ export default function QuestionsList({ goNext, goPrev }) {
         dispatch(setSelectedQuestions(allQuestions));
     };
 
-    useEffect(() => {
-        if (allQuestions && paper) {
-            const newList = allQuestions.filter(
-                (question) =>
-                    question?.std === paper?.std &&
-                    question?.board?.toLowerCase() ===
-                        paper?.board?.toLowerCase() &&
-                    question?.subject?.toLowerCase() ==
-                        paper?.subject?.toLowerCase()
-            );
-
-            dispatch(setFilteredQuestion(newList));
-            console.log(paper?.questions);
-            setQuestionsForTypes(paper?.questions);
-        }
-    }, [allQuestions, paper]);
+     useEffect(() => {
+            if (allQuestions && paper) {
+                console.log("User Subject:", user.subject);
+                console.log("User Standard:", user.std);
+                console.log("All Questions:", allQuestions);
+        
+                // Normalize user subject and std
+                const userSubject = user?.subject?.trim().toLowerCase();
+                const userStd = String(paper?.std).trim().toLowerCase(); // Ensure std is a string
+        
+                const newList = allQuestions.filter((question) => {
+                    const questionSubject = question?.subject?.trim().toLowerCase();
+                    const questionStd = String(question?.std).trim().toLowerCase(); // Ensure std is a string
+                    
+                    return questionSubject === userSubject && questionStd === userStd; // Match both subject and std
+                });
+        
+                console.log("Filtered Questions:", newList);
+                dispatch(setFilteredQuestion(newList));
+            }
+        }, [allQuestions, paper, user.subject, user.std]); // Add user.std to dependencies
+   
 
     const changeQuestionType = (val) => {
         dispatch(setQuestionsType(val));

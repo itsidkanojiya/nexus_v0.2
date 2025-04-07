@@ -24,7 +24,7 @@ import { usePaperStore } from "../../../../zustand/store";
 
 export default function QuestionsList({ goNext, goPrev }) {
   const dispatch = useDispatch();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const { filteredQuestion, selectedQuestions } = useSelector(
     (state) => state.questions
   );
@@ -39,19 +39,49 @@ export default function QuestionsList({ goNext, goPrev }) {
     queryKey: ["getQuestions"],
     queryFn: () => getData("get-questions", token),
   });
-
   useEffect(() => {
     if (allQuestions && paper) {
-      const newList = allQuestions.filter(
-        (question) =>
-          question?.std === paper?.std &&
-          question?.board?.toLowerCase() === paper?.board?.toLowerCase() &&
-          question?.subject?.toLowerCase() == paper?.subject?.toLowerCase()
-      );
+        console.log("User Subject:", user.subject);
+        console.log("User Standard:", user.std);
+        console.log("All Questions:", allQuestions);
 
-      dispatch(setFilteredQuestion(newList));
+        // Normalize user subject and std
+        const userSubject = user?.subject?.trim().toLowerCase();
+        const userStd = String(paper?.std).trim().toLowerCase(); // Ensure std is a string
+
+        const newList = allQuestions.filter((question) => {
+            const questionSubject = question?.subject?.trim().toLowerCase();
+            const questionStd = String(question?.std).trim().toLowerCase(); // Ensure std is a string
+            
+            return questionSubject === userSubject && questionStd === userStd; // Match both subject and std
+        });
+
+        console.log("Filtered Questions:", newList);
+        dispatch(setFilteredQuestion(newList));
     }
-  }, [allQuestions, paper]);
+}, [allQuestions, paper, user.subject, user.std]); // Add user.std to dependencies
+
+//   useEffect(() => {
+//     if (allQuestions && paper) {
+//       console.log(user.subject);
+//       const newList = allQuestions.filter(
+//         (question) =>
+          
+//               // question?.std === paper?.std &&
+//               // question?.board?.toLowerCase() === paper?.board?.toLowerCase() &&
+//               question?.subject?.toLowerCase() == paper?.subject?.toLowerCase()
+//           );
+      
+//       // allQuestions.filter(
+//       //   (question) =>
+//       //     question?.std === paper?.std &&
+//       //     question?.board?.toLowerCase() === paper?.board?.toLowerCase() &&
+//       //     question?.subject?.toLowerCase() == paper?.subject?.toLowerCase()
+//       // );
+// console.log(newList);
+//       dispatch(setFilteredQuestion(newList));
+//     }
+//   }, [allQuestions, paper]);
 
   const changeQuestionType = (val) => {
     dispatch(setQuestionsType(val));

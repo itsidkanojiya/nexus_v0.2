@@ -18,8 +18,9 @@ export default async function getData(endPoint, token = null) {
     const response = await fetch(`${API_ENDPOINT}${endPoint}`, requestOptions);
     const result = await response.json(); // Parsing response as JSON
     // d
-    if (response.ok) {
+    if (response.ok) {   
       return result;
+   
     }
     throw new Error(result?.message || "Something went wrong");
   } catch (error) {

@@ -4,15 +4,10 @@ const initialState = {
     questionsList: [],
     filteredQuestion: [],
     selectedQuestions: [],
-    marks: {
-        mcq: 0,
-        blanks: 0,
-        true_false: 0,
-        onetwo: 0,
-        short: 0,
-        long: 0,
-    },
+    marks: { mcq: 0, blanks: 0, true_false: 0, onetwo: 0, short: 0, long: 0 },
     language: "english",
+    selectedQuestionType: null,  // Added
+    selectedChapter: null        // Added
 };
 
 const questionSlice = createSlice({
@@ -40,23 +35,37 @@ const questionSlice = createSlice({
             );
         },
         setQuestionsType: (state, action) => {
-            if (action?.payload) {
-                state.filteredQuestion = state?.questionsList?.filter(
-                    (question) => question?.type === action.payload
-                );
-            } else {
-                state.filteredQuestion = state?.questionsList;
-            }
+            state.selectedQuestionType = action.payload;
+        
+            state.filteredQuestion = state.questionsList.filter((question) => {
+                const matchesType = action.payload
+                    ? question?.type?.trim().toLowerCase() === String(action.payload).trim().toLowerCase()
+                    : true; 
+                const matchesChapter = state.selectedChapter
+                    ? String(question?.chapter) === String(action.payload)
+                    : true; 
+                return matchesType && matchesChapter;
+            });
         },
+        
         setChapter: (state, action) => {
-            if (action?.payload) {
-                state.filteredQuestion = state?.questionsList?.filter(
-                    (question) => question?.chapter === action.payload
-                );
-            } else {
-                state.filteredQuestion = state?.questionsList;
-            }
+            state.selectedChapter = action.payload;
+        
+            state.filteredQuestion = state.questionsList.filter((question) => {
+                const matchesType = state.selectedQuestionType
+                    ? question?.type?.trim().toLowerCase() === String(state.selectedQuestionType).trim().toLowerCase()
+                    : true; 
+                
+                const matchesChapter = action.payload
+                    ? String(question?.chapter) === String(action.payload)  // Convert both to string
+                    : true; 
+                
+                return matchesType && matchesChapter;
+            });
         },
+        
+        
+        
         setSearch: (state, action) => {
             state.filteredQuestion = state?.questionsList?.filter((question) =>
                 question?.question
