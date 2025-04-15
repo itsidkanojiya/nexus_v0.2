@@ -35,7 +35,7 @@ const Footer = () => {
 
           <nav className="flex flex-wrap flex-col md:flex-row justify-center items-center text-center md:text-left gap-7 lg:gap-x-12 gap-y-4 p-4">
             <img
-              src="/public/logos/Nexus Logo png-01.png"
+              src="/public/logos/logonexus.png"
               className="h-14"
               alt="Nexus Logo"
             />

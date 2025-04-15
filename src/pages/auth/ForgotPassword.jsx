@@ -62,7 +62,7 @@ const ForgotPassword = () => {
       <div className="max-w-md mx-auto bg-white shadow-md rounded-md w-full p-4 md:p-8 space-y-6">
         <div className="flex justify-center">
           <img
-            src="/public/logos/Nexus Logo png-01.png"
+            src="/public/logos/logonexus.png"
             alt="Nexus Logo"
             className="h-20"
           />
