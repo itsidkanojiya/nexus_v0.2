@@ -59,6 +59,7 @@ export default function BookCard({ book }) {
             </div>  
             { (
                 <PDFModal
+            
                     title={book?.chapter_name}
                     onClose={onClose}
                     onOpen={onOpen}

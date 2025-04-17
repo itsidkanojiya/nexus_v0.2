@@ -21,11 +21,12 @@ export default function PDFModal({ isOpen, onClose, pdf, title }) {
 
     return (
         <Modal
-            isOpen={isOpen}
+        size='l'
+       isOpen={isOpen}
             onClose={onClose}
             isCentered
             scrollBehavior="inside"
-            size="full" // Ensures the modal uses the full available width
+          // Ensures the modal uses the full available width
         >
             <ModalOverlay bg="blackAlpha.600" backdropFilter="blur(5px)" />
             <ModalContent m={2} className="rounded-xl overflow-hidden">
@@ -40,7 +41,7 @@ export default function PDFModal({ isOpen, onClose, pdf, title }) {
                     </div>
                 </ModalHeader>
 
-                <ModalBody p={0} className="bg-white">
+                <ModalBody p={0} className="bg-white" >
                     {/* Custom Toolbar */}
                     <div className="flex items-center justify-between px-4 py-2 border-b bg-gray-100">
                         <div className="flex gap-2 items-center">
@@ -54,7 +55,7 @@ export default function PDFModal({ isOpen, onClose, pdf, title }) {
                         </div>
                     </div>
 
-                    <div style={{ height: "600px" }}>
+                    <div >
                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
                             <Viewer
                                 fileUrl={pdf}
