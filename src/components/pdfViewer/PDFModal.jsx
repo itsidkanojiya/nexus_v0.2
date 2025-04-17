@@ -25,7 +25,7 @@ export default function PDFModal({ isOpen, onClose, pdf, title }) {
             onClose={onClose}
             isCentered
             scrollBehavior="inside"
-            size="xl"
+            size="full" // Ensures the modal uses the full available width
         >
             <ModalOverlay bg="blackAlpha.600" backdropFilter="blur(5px)" />
             <ModalContent m={2} className="rounded-xl overflow-hidden">
