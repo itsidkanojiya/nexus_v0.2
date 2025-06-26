@@ -25,9 +25,13 @@ import { usePaperStore } from "../../../../zustand/store";
 export default function QuestionsList({ goNext, goPrev }) {
   const dispatch = useDispatch();
   const { token, user } = useAuth();
-  const { filteredQuestion, selectedQuestions } = useSelector(
-    (state) => state.questions
-  );
+  const {
+    filteredQuestion,
+    selectedQuestions,
+    selectedQuestionType,
+    selectedChapter,
+  } = useSelector((state) => state.questions);
+
   const paper = usePaperStore((state) => state.paper);
 
   const {
@@ -39,56 +43,58 @@ export default function QuestionsList({ goNext, goPrev }) {
     queryKey: ["getQuestions"],
     queryFn: () => getData("get-questions", token),
   });
+
+  // Store the base filtered list (by subject/std) in local state for further filtering
+  const [baseQuestions, setBaseQuestions] = useState([]);
+
   useEffect(() => {
     if (allQuestions && paper) {
-        console.log("User Subject:", user.subject);
-        console.log("User Standard:", user.std);
-        console.log("All Questions:", allQuestions);
+      // Normalize user subject and std
+      const userSubject = user?.subject?.trim().toLowerCase();
+      const userStd = String(paper?.std).trim().toLowerCase();
 
-        // Normalize user subject and std
-        const userSubject = user?.subject?.trim().toLowerCase();
-        const userStd = String(paper?.std).trim().toLowerCase(); // Ensure std is a string
+      const newList = allQuestions.filter((question) => {
+        const questionSubject = question?.subject?.trim().toLowerCase();
+        const questionStd = String(question?.std).trim().toLowerCase();
+        return questionSubject === userSubject && questionStd === userStd;
+      });
 
-        const newList = allQuestions.filter((question) => {
-            const questionSubject = question?.subject?.trim().toLowerCase();
-            const questionStd = String(question?.std).trim().toLowerCase(); // Ensure std is a string
-            
-            return questionSubject === userSubject && questionStd === userStd; // Match both subject and std
-        });
-
-        console.log("Filtered Questions:", newList);
-        dispatch(setFilteredQuestion(newList));
+      setBaseQuestions(newList);
+      dispatch(setFilteredQuestion(newList));
     }
-}, [allQuestions, paper, user.subject, user.std]); // Add user.std to dependencies
+  }, [allQuestions, paper, user.subject, user.std, dispatch]);
 
-//   useEffect(() => {
-//     if (allQuestions && paper) {
-//       console.log(user.subject);
-//       const newList = allQuestions.filter(
-//         (question) =>
-          
-//               // question?.std === paper?.std &&
-//               // question?.board?.toLowerCase() === paper?.board?.toLowerCase() &&
-//               question?.subject?.toLowerCase() == paper?.subject?.toLowerCase()
-//           );
-      
-//       // allQuestions.filter(
-//       //   (question) =>
-//       //     question?.std === paper?.std &&
-//       //     question?.board?.toLowerCase() === paper?.board?.toLowerCase() &&
-//       //     question?.subject?.toLowerCase() == paper?.subject?.toLowerCase()
-//       // );
-// console.log(newList);
-//       dispatch(setFilteredQuestion(newList));
-//     }
-//   }, [allQuestions, paper]);
+  // Filtering logic for question type and chapter
+  useEffect(() => {
+    let filtered = baseQuestions;
+
+    // If a question type is selected (not null/empty/"all"), filter by type
+    if (selectedQuestionType && selectedQuestionType !== "all") {
+      filtered = filtered.filter(
+        (q) =>
+          q?.type?.trim().toLowerCase() ===
+          String(selectedQuestionType).trim().toLowerCase()
+      );
+    }
+
+    // If a chapter is selected (not null/empty/"all"), filter by chapter
+    if (selectedChapter && selectedChapter !== "all") {
+      filtered = filtered.filter(
+        (q) => String(q?.chapter) === String(selectedChapter)
+      );
+    }
+
+    dispatch(setFilteredQuestion(filtered));
+  }, [selectedQuestionType, selectedChapter, baseQuestions, dispatch]);
 
   const changeQuestionType = (val) => {
-    dispatch(setQuestionsType(val));
+    // If "all" or empty, treat as no filter
+    dispatch(setQuestionsType(val === "all" ? null : val));
   };
 
   const changeChapter = (val) => {
-    dispatch(setChapter(val));
+    // If "all" or empty, treat as no filter
+    dispatch(setChapter(val === "all" ? null : val));
   };
 
   const handleSearch = (e) => {
