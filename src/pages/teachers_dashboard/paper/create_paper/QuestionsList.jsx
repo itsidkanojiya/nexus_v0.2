@@ -24,7 +24,7 @@ import { usePaperStore } from "../../../../zustand/store";
 
 export default function QuestionsList({ goNext, goPrev }) {
   const dispatch = useDispatch();
-  const { token, user } = useAuth();
+  const { token } = useAuth(); // don't rely on user from here anymore
   const {
     filteredQuestion,
     selectedQuestions,
@@ -34,41 +34,53 @@ export default function QuestionsList({ goNext, goPrev }) {
 
   const paper = usePaperStore((state) => state.paper);
 
+  // fetch all questions
   const {
     data: allQuestions,
-    isLoading,
-    isError,
-    error,
+    isLoading: qLoading,
+    isError: qError,
+    error: qErr,
   } = useQuery({
     queryKey: ["getQuestions"],
     queryFn: () => getData("get-questions", token),
+    enabled: !!token,
   });
 
-  // Store the base filtered list (by subject/std) in local state for further filtering
+  // fetch user from API (NOT local)
+  const {
+    data: userResp,
+    isLoading: userLoading,
+    isError: userError,
+    error: userErr,
+  } = useQuery({
+    queryKey: ["getUserProfile"],
+    queryFn: () => getData("get-user", token), // your helper should return the JSON
+    enabled: !!token,
+  });
+
   const [baseQuestions, setBaseQuestions] = useState([]);
 
+  // build the base list using subject from API and std from paper
   useEffect(() => {
-    if (allQuestions && paper) {
-      // Normalize user subject and std
-      const userSubject = user?.subject?.trim().toLowerCase();
-      const userStd = String(paper?.std).trim().toLowerCase();
+    if (!allQuestions || !paper || !userResp?.user) return;
 
-      const newList = allQuestions.filter((question) => {
-        const questionSubject = question?.subject?.trim().toLowerCase();
-        const questionStd = String(question?.std).trim().toLowerCase();
-        return questionSubject === userSubject && questionStd === userStd;
-      });
+    const apiSubject = userResp.user.subject?.trim().toLowerCase();
+    const userStd = String(paper?.std).trim().toLowerCase();
 
-      setBaseQuestions(newList);
-      dispatch(setFilteredQuestion(newList));
-    }
-  }, [allQuestions, paper, user.subject, user.std, dispatch]);
+    const newList = allQuestions.filter((question) => {
+      const questionSubject = question?.subject?.trim().toLowerCase();
+      const questionStd = String(question?.std).trim().toLowerCase();
+      return questionSubject === apiSubject && questionStd === userStd;
+    });
 
-  // Filtering logic for question type and chapter
+    setBaseQuestions(newList);
+    dispatch(setFilteredQuestion(newList));
+  }, [allQuestions, paper, userResp?.user?.subject, dispatch]);
+
+  // apply UI filters on top (type + chapter)
   useEffect(() => {
     let filtered = baseQuestions;
 
-    // If a question type is selected (not null/empty/"all"), filter by type
     if (selectedQuestionType && selectedQuestionType !== "all") {
       filtered = filtered.filter(
         (q) =>
@@ -77,7 +89,6 @@ export default function QuestionsList({ goNext, goPrev }) {
       );
     }
 
-    // If a chapter is selected (not null/empty/"all"), filter by chapter
     if (selectedChapter && selectedChapter !== "all") {
       filtered = filtered.filter(
         (q) => String(q?.chapter) === String(selectedChapter)
@@ -88,24 +99,42 @@ export default function QuestionsList({ goNext, goPrev }) {
   }, [selectedQuestionType, selectedChapter, baseQuestions, dispatch]);
 
   const changeQuestionType = (val) => {
-    // If "all" or empty, treat as no filter
     dispatch(setQuestionsType(val === "all" ? null : val));
   };
 
   const changeChapter = (val) => {
-    // If "all" or empty, treat as no filter
     dispatch(setChapter(val === "all" ? null : val));
   };
 
   const handleSearch = (e) => {
-    const { value } = e.target;
-    dispatch(setSearch(value));
+    dispatch(setSearch(e.target.value));
   };
+
+  // Optional: simple loading/error state
+  if (qLoading || userLoading) {
+    return <Message type="info" message="Loading questions…" />;
+  }
+  if (qError) {
+    return (
+      <Message
+        type="error"
+        message={`Failed to load questions: ${qErr?.message || ""}`}
+      />
+    );
+  }
+  if (userError) {
+    return (
+      <Message
+        type="error"
+        message={`Failed to load user: ${userErr?.message || ""}`}
+      />
+    );
+  }
 
   return (
     <div>
-      <div className=" flex justify-between items-center mb-4">
-        <AppButton onClick={() => goPrev()} className=" text-xs">
+      <div className="flex justify-between items-center mb-4">
+        <AppButton onClick={goPrev} className="text-xs">
           Go Back
         </AppButton>
         {selectedQuestions?.length > 0 && (
@@ -114,19 +143,20 @@ export default function QuestionsList({ goNext, goPrev }) {
               dispatch(setMarks({}));
               goNext();
             }}
-            className=" text-xs"
+            className="text-xs"
           >
             Next
           </AppButton>
         )}
       </div>
+
       <div className="grid lg:grid-cols-[auto_1fr_1fr] gap-2 mb-4">
         <GetQuestionType handleChange={changeQuestionType} />
         <GetChapter handleChange={changeChapter} />
         <InputBox
           handleChange={handleSearch}
           name="search"
-          rightIcon={<AiOutlineSearch className=" text-slate-600 text-2xl" />}
+          rightIcon={<AiOutlineSearch className="text-slate-600 text-2xl" />}
           placeholder="search"
           type="search"
           topLabel={false}
@@ -134,9 +164,9 @@ export default function QuestionsList({ goNext, goPrev }) {
       </div>
 
       {/* Questions */}
-      <div className=" space-y-3">
+      <div className="space-y-3">
         {filteredQuestion?.length > 0 ? (
-          filteredQuestion?.map((question) => (
+          filteredQuestion.map((question) => (
             <QuestionCard question={question} key={question?.id} />
           ))
         ) : (
@@ -168,14 +198,14 @@ export function QuestionCard({ question }) {
                 {isSelected ? (
                   <button
                     onClick={() => dispatch(removeQuestion(question?.id))}
-                    className=" hover:bg-red-500 border rounded-full bg-red-600 text-white border-red-600 font-bold p-1"
+                    className="hover:bg-red-500 border rounded-full bg-red-600 text-white border-red-600 font-bold p-1"
                   >
                     <IoRemoveOutline className="text-2xl" />
                   </button>
                 ) : (
                   <button
                     onClick={() => dispatch(addQuestion(question))}
-                    className=" border rounded-full bg-primary text-white border-primary font-bold p-1"
+                    className="border rounded-full bg-primary text-white border-primary font-bold p-1"
                   >
                     <IoAdd className="text-2xl" />
                   </button>
@@ -183,40 +213,32 @@ export function QuestionCard({ question }) {
               </div>
             </div>
           </div>
+
           <div>
             <h1 className="text-sm sm:text-base ">{question?.question}</h1>
+
             {question?.options?.length > 0 ? (
               <div className="flex gap-4">
-                {question?.options?.map((option, index) => (
+                {question?.options?.map((option) => (
                   <div key={option} className="flex items-center gap-2 py-2">
-                    <img src="/img/checkbox.png" className="h-2 xs:h-6" />
                     <p className="text-[10px] xs:text-base">{option}</p>
                   </div>
                 ))}
               </div>
             ) : null}
-            <div>
-              <div className="flex gap-2 items-center">
-                <div>
-                  <p className="text-sm">Answer</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setShowAns(true);
-                      } else {
-                        setShowAns(false);
-                      }
-                    }}
-                    type="checkbox"
-                    value=""
-                    className="sr-only peer"
-                  />
-                  <div className="group peer ring-0 bg-gradient-to-bl from-neutral-800 via-neutral-700 to-neutral-600 rounded-full outline-none duration-1000 after:duration-300 w-8 h-4 shadow-md peer-focus:outline-none after:content-[''] after:rounded-full after:absolute after:bg-gray-200 peer-checked:after:rotate-180 after:bg-gradient-to-r after:from-emerald-500 after:to-emerald-900 after:outline-none after:h-2 after:w-2 after:top-1 after:left-1 peer-checked:after:translate-x-4 peer-hover:after:scale-95 peer-checked:bg-gradient-to-r peer-checked:from-emerald-500 peer-checked:to-emerald-900"></div>
-                </label>
-              </div>
+
+            <div className="flex gap-2 items-center">
+              <p className="text-sm">Answer</p>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  onChange={(e) => setShowAns(e.target.checked)}
+                  type="checkbox"
+                  className="sr-only peer"
+                />
+                <div className="group peer ring-0 bg-gradient-to-bl from-neutral-800 via-neutral-700 to-neutral-600 rounded-full outline-none duration-1000 after:duration-300 w-8 h-4 shadow-md peer-focus:outline-none after:content-[''] after:rounded-full after:absolute after:bg-gray-200 peer-checked:after:rotate-180 after:bg-gradient-to-r after:from-emerald-500 after:to-emerald-900 after:outline-none after:h-2 after:w-2 after:top-1 after:left-1 peer-checked:after:translate-x-4 peer-hover:after:scale-95 peer-checked:bg-gradient-to-r peer-checked:from-emerald-500 peer-checked:to-emerald-900"></div>
+              </label>
             </div>
+
             {showAns && (
               <div className="text-sm font-semibold mt-1">
                 Answer is : {question?.answer}

@@ -21,6 +21,7 @@ const PaperPreview = ({
     getSelectedQuestionsWithDetails(state?.questions)
   );
   const paper = usePaperStore((state) => state.paper);
+  console.log("paper", paper);
   const dispatch = useDispatch();
   const [showAnswers, setShowAnswers] = useState(false);
 
@@ -120,8 +121,8 @@ const PaperPreview = ({
           </PDFDownloadLink>
         )}
       </div>
-      <div className="">
-        <PDFViewer className="w-full min-h-[600px]" showToolbar={false}>
+      <div className="flex flex-col w-full h-screen">
+        <PDFViewer className="flex-1 w-full h-full" showToolbar={false}>
           <PDFPreview
             showAnswers={showAnswers}
             headerDetails={paper}
