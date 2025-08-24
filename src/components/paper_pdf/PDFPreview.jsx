@@ -11,17 +11,45 @@ import PeparHeader from "./PeparHeader";
 import QuestionBox from "./QuestionBox";
 import { tw } from "../../constants/tw.confing";
 
-// Register fonts
-Font.register({
-  family: "LohitGujarati",
-  src: "../../../public/fonts/lohit_gujarati/Lohit-Gujarati.ttf",
-});
-Font.register({
-  family: "Devnagari",
-  src: "../../../public/fonts/hindi/NotoSansDevanagari-Regular.ttf",
-});
+// Import font files directly
+import lohitGujaratiFont from "/fonts/lohit_gujarati/Lohit-Gujarati.ttf";
+import devanagariFont from "/fonts/hindi/NotoSansDevanagari-Regular.ttf";
 
-// Styles
+// Alternative approach: If direct imports don't work, you can convert fonts to base64
+// and use them like this:
+// Font.register({
+//   family: "LohitGujarati",
+//   src: "data:font/ttf;base64,YOUR_BASE64_STRING_HERE"
+// });
+
+// Utility function to register fonts with error handling
+const registerFonts = () => {
+  try {
+    Font.register({
+      family: "LohitGujarati",
+      src: lohitGujaratiFont,
+    });
+    Font.register({
+      family: "Devnagari",
+      src: devanagariFont,
+    });
+  } catch (error) {
+    console.warn("Font registration failed, using fallback fonts:", error);
+    // Fallback to system fonts if custom fonts fail
+    Font.register({
+      family: "LohitGujarati",
+      src: "Helvetica",
+    });
+    Font.register({
+      family: "Devnagari",
+      src: "Helvetica",
+    });
+  }
+};
+
+// Register fonts
+registerFonts();
+
 const styles = StyleSheet.create({
   eng14: { fontSize: 14 },
   guj14: { fontFamily: "LohitGujarati", fontSize: 14 },
@@ -55,15 +83,24 @@ export default function PDFPreview({
   ];
 
   const font14 =
-    headerDetails?.subject?.toLowerCase() === "hindi"
-      ? "hin14"
+    headerDetails?.subject?.toLowerCase() === "hindi" ||
+    headerDetails?.subject?.toLowerCase() === "sanskrit"
+      ? "hin14" // or make a new "sans14"
       : headerDetails?.subject?.toLowerCase() === "gujarati"
       ? "guj14"
       : "eng14";
 
   return (
     <Document>
-      <Page size="A4" style={tw("p-8")} wrap>
+      {/* add a little extra left padding so content never hugs the edge */}
+      <Page
+        size="A4"
+        style={[
+          tw("p-8"),
+          { paddingLeft: 30, paddingRight: 30, paddingBottom: 60 },
+        ]} // 👈 extra bottom padding
+        wrap
+      >
         {/* Header */}
         {headerDetails && (
           <PeparHeader
@@ -72,67 +109,68 @@ export default function PDFPreview({
           />
         )}
 
-        {/* Body Content */}
+        {/* Body */}
         <View style={tw("mt-10")}>
-          {questionTypes?.map((type, index) => {
-            if (!questionsList[type]) return null;
-            const sectionLetter = String.fromCharCode(65 + index); // A, B, C...
-            return (
-              <View style={tw("mb-8")} key={index} wrap={false}>
-                {/* Section Title */}
-                <View
-                  style={tw("flex flex-row items-center justify-between mb-2")}
-                >
-                  <View style={tw("flex flex-row items-center gap-2")}>
-                    <Text style={tw("text-[13px] font-extrabold text-sky-700")}>
-                      {sectionLetter} )
-                    </Text>
+          {(() => {
+            const activeQuestionTypes = questionTypes.filter(
+              (type) => questionsList[type]
+            );
+            return activeQuestionTypes.map((type, activeIndex) => {
+              const sectionLetter = String.fromCharCode(65 + activeIndex); // A, B, C...
+
+              return (
+                // IMPORTANT: allow wrapping (NO wrap={false})
+                <View style={tw("mb-8")} key={type}>
+                  {/* Section Title Row */}
+                  <View
+                    style={tw(
+                      "flex flex-row items-center justify-between mb-2"
+                    )}
+                  >
+                    <View style={tw("flex flex-row items-center")}>
+                      <Text
+                        style={tw("text-[13px] font-extrabold text-sky-700")}
+                      >
+                        {sectionLetter} )
+                      </Text>
+                      <Text
+                        style={[
+                          styles[font14],
+                          tw("text-[13px] font-extrabold text-sky-700"),
+                          { marginLeft: 6, marginRight: 12 }, // small gap before marks
+                        ]}
+                      >
+                        {questionsList[type].title}
+                      </Text>
+                    </View>
                     <Text
                       style={[
                         styles[font14],
                         tw("text-[13px] font-extrabold text-sky-700"),
                       ]}
                     >
-                      {questionsList[type].title}
+                      ( {questionsList[type].marks} )
                     </Text>
                   </View>
-                  <Text
-                    style={[
-                      styles[font14],
-                      tw("text-[13px] font-extrabold text-sky-700"),
-                    ]}
-                  >
-                    ( {questionsList[type].marks} )
-                  </Text>
+
+                  {/* Questions */}
+                  {questionsList[type].questions.map((question, qIndex) => (
+                    <QuestionBox
+                      key={qIndex}
+                      question={question}
+                      index={qIndex}
+                      showAnswers={showAnswers}
+                      type={type}
+                      style14={styles[font14]}
+                    />
+                  ))}
                 </View>
-
-                {/* Questions List */}
-                {questionsList[type].questions.map((question, qIndex) => (
-                  <QuestionBox
-                    key={qIndex}
-                    question={question}
-                    index={qIndex}
-                    showAnswers={showAnswers}
-                    type={type}
-                    style14={styles[font14]}
-                  />
-                ))}
-              </View>
-            );
-          })}
-
-          {/* Signature Section at End */}
-          {/* <View style={tw("flex flex-row justify-between mt-12")}>
-            <Text style={tw("text-sm font-serif font-bold")}>
-              TEACHER'S SIGN : __________________________
-            </Text>
-            <Text style={tw("text-sm font-serif font-bold")}>
-              DATE : __________________________
-            </Text>
-          </View> */}
+              );
+            });
+          })()}
         </View>
 
-        {/* Footer on every page */}
+        {/* Footer */}
         <View style={styles.footer} fixed>
           <Text>
             {headerDetails?.subject || "Paper"} | Std -{" "}

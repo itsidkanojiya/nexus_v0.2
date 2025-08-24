@@ -1,5 +1,8 @@
-import React from "react";
-import { getSelectedQuestionsWithDetails } from "../../../../store/features/questionsSlice";
+import React, { useEffect } from "react";
+import {
+  getSelectedQuestionsWithDetails,
+  setLanguage,
+} from "../../../../store/features/questionsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import PDFPreview from "../../../../components/paper_pdf/PDFPreview";
@@ -17,12 +20,23 @@ const PaperPreview = ({
   goPrev = () => {},
 }) => {
   const { token, user } = useAuth();
-  const paperQuestions = useSelector((state) =>
-    getSelectedQuestionsWithDetails(state?.questions)
-  );
   const paper = usePaperStore((state) => state.paper);
-  console.log("paper", paper);
   const dispatch = useDispatch();
+  useEffect(() => {
+    if (paper?.subject === "Hindi") {
+      dispatch(setLanguage("hindi"));
+    } else if (paper?.subject === "Gujarati") {
+      dispatch(setLanguage("gujarati"));
+    } else {
+      dispatch(setLanguage("english"));
+    }
+  }, [paper?.subject, dispatch]);
+  const paperQuestions = useSelector((state) => {
+    return getSelectedQuestionsWithDetails(state?.questions);
+  });
+
+  console.log("paper", paper);
+
   const [showAnswers, setShowAnswers] = useState(false);
 
   const { formDatatoken } = useAuth();
@@ -41,6 +55,24 @@ const PaperPreview = ({
       console.log(error);
     },
   });
+
+  const generateFileName = () => {
+    const schoolName = paper?.school_name || "School";
+    const subject = paper?.subject || "Subject";
+    const standard = paper?.std || "Std";
+    const totalMarks = Object.values(paperQuestions).reduce(
+      (total, section) => {
+        return total + (section.marks || 0);
+      },
+      0
+    );
+
+    // Clean the names for filename (remove special characters, spaces)
+    const cleanSchoolName = schoolName.replace(/[^a-zA-Z0-9]/g, "_");
+    const cleanSubject = subject.replace(/[^a-zA-Z0-9]/g, "_");
+
+    return `${cleanSchoolName}_${cleanSubject}_Std${standard}_${totalMarks}Marks.pdf`;
+  };
 
   const handleSubmit = async () => {
     const outputData = {
@@ -111,7 +143,7 @@ const PaperPreview = ({
                 questionsList={paperQuestions}
               />
             }
-            fileName="nexusPaper.pdf"
+            fileName={generateFileName()}
             className="p-2 bg-red-600 w-full text-center text-white hover:text-blue-200  font-semibold mb-0"
             style={{ width: "100%" }}
           >

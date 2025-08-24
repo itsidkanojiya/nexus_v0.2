@@ -11,15 +11,44 @@ import PeparHeader from "./PeparHeader";
 import QuestionBox from "./QuestionBox";
 import { tw } from "../../constants/tw.confing";
 
+// Import font files directly
+import lohitGujaratiFont from "/fonts/lohit_gujarati/Lohit-Gujarati.ttf";
+import devanagariFont from "/fonts/hindi/NotoSansDevanagari-Regular.ttf";
+
+// Alternative approach: If direct imports don't work, you can convert fonts to base64
+// and use them like this:
+// Font.register({
+//   family: "LohitGujarati",
+//   src: "data:font/ttf;base64,YOUR_BASE64_STRING_HERE"
+// });
+
+// Utility function to register fonts with error handling
+const registerFonts = () => {
+  try {
+    Font.register({
+      family: "LohitGujarati",
+      src: lohitGujaratiFont,
+    });
+    Font.register({
+      family: "Devnagari",
+      src: devanagariFont,
+    });
+  } catch (error) {
+    console.warn("Font registration failed, using fallback fonts:", error);
+    // Fallback to system fonts if custom fonts fail
+    Font.register({
+      family: "LohitGujarati",
+      src: "Helvetica",
+    });
+    Font.register({
+      family: "Devnagari",
+      src: "Helvetica",
+    });
+  }
+};
+
 // Register fonts
-Font.register({
-  family: "LohitGujarati",
-  src: "../../../public/fonts/lohit_gujarati/Lohit-Gujarati.ttf",
-});
-Font.register({
-  family: "Devnagari",
-  src: "../../../public/fonts/hindi/NotoSansDevanagari-Regular.ttf",
-});
+registerFonts();
 
 // Styles
 const styles = StyleSheet.create({
@@ -55,15 +84,24 @@ export default function PDFPreview({
   ];
 
   const font14 =
-    headerDetails?.subject?.toLowerCase() === "hindi"
-      ? "hin14"
+    headerDetails?.subject?.toLowerCase() === "hindi" ||
+    headerDetails?.subject?.toLowerCase() === "sanskrit"
+      ? "hin14" // or make a new "sans14"
       : headerDetails?.subject?.toLowerCase() === "gujarati"
       ? "guj14"
       : "eng14";
 
   return (
     <Document>
-      <Page size="A4" style={tw("p-8")} wrap>
+      {/* Add bottom padding so content never overlaps the fixed footer */}
+      <Page
+        size="A4"
+        style={[
+          tw("p-8"),
+          { paddingLeft: 30, paddingRight: 30, paddingBottom: 60 },
+        ]}
+        wrap
+      >
         {/* Header */}
         {headerDetails && (
           <PeparHeader
@@ -73,24 +111,34 @@ export default function PDFPreview({
         )}
 
         {/* All Question Sections */}
+        {/* All Question Sections */}
         <View style={tw("mt-10")}>
-          {questionTypes.map((type, index) => {
-            if (!questionsList[type]) return null;
-            const sectionLetter = String.fromCharCode(65 + index); // A, B, C...
+          {(() => {
+            // More robust filtering - check if questions exist and have length > 0
+            const activeQuestionTypes = questionTypes.filter(
+              (type) =>
+                questionsList[type] &&
+                questionsList[type].questions &&
+                questionsList[type].questions.length > 0
+            );
 
-            const questions = questionsList[type].questions;
+            console.log("Active question types:", activeQuestionTypes);
 
-            return (
-              <View style={tw("mb-8")} key={index}>
-                {/* Wrap Section Title + First Question together */}
-                <View wrap={false}>
+            return activeQuestionTypes.map((type, activeIndex) => {
+              const sectionLetter = String.fromCharCode(65 + activeIndex); // A, B, C...
+              const questions = questionsList[type].questions || [];
+
+              console.log(
+                `Type: ${type}, Index: ${activeIndex}, Letter: ${sectionLetter}, Questions count: ${questions.length}`
+              );
+
+              return (
+                <View style={tw("mb-8")} key={type}>
                   {/* Section Title */}
                   <View
-                    style={tw(
-                      "flex flex-row items-center justify-between mb-2"
-                    )}
+                    style={tw("flex flex-row items-center justify-start mb-2")}
                   >
-                    <View style={tw("flex flex-row items-center gap-2")}>
+                    <View style={tw("flex flex-row items-center")}>
                       <Text
                         style={tw("text-[13px] font-extrabold text-sky-700")}
                       >
@@ -100,50 +148,30 @@ export default function PDFPreview({
                         style={[
                           styles[font14],
                           tw("text-[13px] font-extrabold text-sky-700"),
+                          { marginLeft: 6 },
                         ]}
                       >
                         {questionsList[type].title}
                       </Text>
                     </View>
-                    <Text
-                      style={[
-                        styles[font14],
-                        tw("text-[13px] font-extrabold text-sky-700"),
-                      ]}
-                    >
-                      ( {questionsList[type].marks} )
-                    </Text>
                   </View>
 
-                  {/* First Question */}
-                  {questions.length > 0 && (
+                  {/* Questions */}
+                  {questions.map((question, qIndex) => (
                     <QuestionBox
-                      key={0}
-                      question={questions[0]}
-                      index={0}
+                      key={qIndex}
+                      question={question}
+                      index={qIndex}
                       showAnswers={showAnswers}
                       type={type}
                       style14={styles[font14]}
                     />
-                  )}
+                  ))}
                 </View>
-
-                {/* Remaining Questions */}
-                {questions.slice(1).map((question, qIndex) => (
-                  <QuestionBox
-                    key={qIndex + 1}
-                    question={question}
-                    index={qIndex + 1}
-                    showAnswers={showAnswers}
-                    type={type}
-                    style14={styles[font14]}
-                  />
-                ))}
-              </View>
-            );
-          })}
+              );
+            });
+          })()}
         </View>
-
         {/* Footer: Page number and subject on EVERY page */}
         <View style={styles.footer} fixed>
           <Text>

@@ -50,10 +50,12 @@ const PaperDetails = ({ step, goNext, goPrev }) => {
       setLogo(details?.data?.logo);
       const keys = Object.keys(details?.data);
       keys.forEach((key) => {
-        setValue(key, details?.data[key]);
+        if (key !== "subject") {
+          setValue(key, details?.data[key]);
+        }
       });
     }
-  }, [details]);
+  }, [details, setValue, setPaper]);
 
   const changeLogo = (file) => {
     setLogo(file);
@@ -84,14 +86,20 @@ const PaperDetails = ({ step, goNext, goPrev }) => {
       toast.error(error?.message);
     },
   });
-
   const onSubmit = async (data) => {
-    dispatch(setSelectedQuestions([]));
-    await addNewPaper({
+    // Use the subject from the form data (which comes from GetSubjects component)
+    // NOT from useAuth() which might be stale
+    const subjectToUse = data.subject;
+
+    const submitData = {
       ...data,
+      subject: subjectToUse,
       day: getDayName(data?.date),
       logo: logo,
-    });
+    };
+
+    dispatch(setSelectedQuestions([]));
+    await addNewPaper(submitData);
   };
 
   return (
@@ -151,7 +159,11 @@ const PaperDetails = ({ step, goNext, goPrev }) => {
           />
           <GetBoards register={register} errors={errors} />
           <GetStandard register={register} errors={errors} />
-          <GetSubjects register={register} errors={errors} />
+          <GetSubjects
+            register={register}
+            errors={errors}
+            setValue={setValue}
+          />
         </div>
         <div>
           <AppButton isLoading={isPending} type="submit" className=" text-sm">
