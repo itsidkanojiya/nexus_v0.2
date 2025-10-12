@@ -60,22 +60,29 @@ export default function QuestionsList({ goNext, goPrev }) {
 
   const [baseQuestions, setBaseQuestions] = useState([]);
 
-  // build the base list using subject from API and std from paper
+  // build the base list using subject from API, std and board from paper
   useEffect(() => {
     if (!allQuestions || !paper || !userResp?.user) return;
 
     const apiSubject = userResp.user.subject?.trim().toLowerCase();
     const userStd = String(paper?.std).trim().toLowerCase();
+    const userBoard = paper?.board?.trim().toLowerCase();
 
     const newList = allQuestions.filter((question) => {
       const questionSubject = question?.subject?.trim().toLowerCase();
       const questionStd = String(question?.std).trim().toLowerCase();
-      return questionSubject === apiSubject && questionStd === userStd;
+      const questionBoard = question?.board?.trim().toLowerCase();
+
+      return (
+        questionSubject === apiSubject &&
+        questionStd === userStd &&
+        questionBoard === userBoard
+      );
     });
 
     setBaseQuestions(newList);
     dispatch(setFilteredQuestion(newList));
-  }, [allQuestions, paper, userResp?.user?.subject, dispatch]);
+  }, [allQuestions, paper, userResp?.user?.subject, paper?.board, dispatch]);
 
   // apply UI filters on top (type + chapter)
   useEffect(() => {
@@ -191,7 +198,7 @@ export function QuestionCard({ question }) {
           <div className="mb-2">
             <div className="flex justify-between items-center">
               <p className="text-[14px] font-semibold bg-white w-fit px-3 rounded-full shadow-inner ">
-                {question?.subject} - {question?.std}
+                {question?.subject} - {question?.std} - {question?.board}
               </p>
 
               <div>

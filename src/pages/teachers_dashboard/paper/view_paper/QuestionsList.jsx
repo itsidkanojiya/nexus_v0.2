@@ -26,7 +26,7 @@ import updateData from "../../../../helpers/updateData";
 
 export default function QuestionsList({ goNext, goPrev }) {
   const dispatch = useDispatch();
-  const { token ,user} = useAuth();
+  const { token, user } = useAuth();
   const { filteredQuestion, selectedQuestions } = useSelector(
     (state) => state.questions
   );
@@ -56,26 +56,33 @@ export default function QuestionsList({ goNext, goPrev }) {
   };
 
   useEffect(() => {
-     if (allQuestions && paper) {
-         console.log("User Subject:", user.subject);
-         console.log("User Standard:", user.std);
-         console.log("All Questions:", allQuestions);
- 
-         // Normalize user subject and std
-         const userSubject = user?.subject?.trim().toLowerCase();
-         const userStd = String(paper?.std).trim().toLowerCase(); // Ensure std is a string
- 
-         const newList = allQuestions.filter((question) => {
-             const questionSubject = question?.subject?.trim().toLowerCase();
-             const questionStd = String(question?.std).trim().toLowerCase(); // Ensure std is a string
-             
-             return questionSubject === userSubject && questionStd === userStd; // Match both subject and std
-         });
- 
-         console.log("Filtered Questions:", newList);
-         dispatch(setFilteredQuestion(newList));
-     }
- }, [allQuestions, paper, user.subject, user.std]); // Add user.std to dependencies
+    if (allQuestions && paper) {
+      console.log("User Subject:", user.subject);
+      console.log("User Standard:", user.std);
+      console.log("User Board:", paper.board);
+      console.log("All Questions:", allQuestions);
+
+      // Normalize user subject, std, and board
+      const userSubject = user?.subject?.trim().toLowerCase();
+      const userStd = String(paper?.std).trim().toLowerCase(); // Ensure std is a string
+      const userBoard = paper?.board?.trim().toLowerCase();
+
+      const newList = allQuestions.filter((question) => {
+        const questionSubject = question?.subject?.trim().toLowerCase();
+        const questionStd = String(question?.std).trim().toLowerCase(); // Ensure std is a string
+        const questionBoard = question?.board?.trim().toLowerCase();
+
+        return (
+          questionSubject === userSubject &&
+          questionStd === userStd &&
+          questionBoard === userBoard
+        ); // Match subject, std, and board
+      });
+
+      console.log("Filtered Questions:", newList);
+      dispatch(setFilteredQuestion(newList));
+    }
+  }, [allQuestions, paper, user.subject, user.std, paper?.board]); // Add paper.board to dependencies
 
   const changeQuestionType = (val) => {
     dispatch(setQuestionsType(val));
@@ -147,7 +154,7 @@ export function QuestionCard({ question }) {
           <div className="mb-2">
             <div className="flex justify-between items-center">
               <p className="text-[14px] font-semibold bg-white w-fit px-3 rounded-full shadow-inner ">
-                {question?.subject} - {question?.std}
+                {question?.subject} - {question?.std} - {question?.board}
               </p>
 
               <div>

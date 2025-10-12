@@ -21,45 +21,57 @@ import Unverified from "../pages/Unverified";
 import Unauthorized from "../pages/Unauthorized";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <AppLayout />,
-      children: [
-        { index: true, element: <Home /> },
-        { path: "/aboutus", element: <AboutUs /> },
-        { path: "/login", element: <Login /> },
-        { path: "/sing-up", element: <Register /> },
-        { path: "/forgot-password", element: <ForgotPassword /> },
-        { path: "/request-subject-change", element: <SubjectChangeRequest /> },
-        { path: "/ncert-books", element: <NcertBooks /> },
-        { path: "/ncert-books-solution", element: <NcertBooksSolution /> },
-        { path: "/state-board-books", element: <StateBoardBooks /> },
-        { path: "/state-board-books-solution", element: <StateBoardBooksSolution /> },
-      ],
-    },
-    {
-      path: "/question-paper-generator",
-      element: <PrivateRoute component={DashboardLayout} />,
-      children: [
-        { index: true, element: <CreatePaper /> },
-        { path: "/question-paper-generator/create-paper", element: <CreatePaper /> },
-        { path: "/question-paper-generator/view-paper", element: <ViewPaper /> },
-        { path: "/question-paper-generator/create-assignment", element: <CreateAssignment /> },
-        { path: "/question-paper-generator/view-assignment", element: <ViewAssignment /> },
-      ],
-    },
-    {
-      path: "/unauthorized",
-      element: <Unauthorized />, // Create an `Unauthorized` component if not already done
-    },
-    {
-      path: "/unverified",
-      element: <Unverified />,
-    },
-  ]);
-  
+  {
+    path: "/",
+    element: <AppLayout />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: "/aboutus", element: <AboutUs /> },
+      { path: "/login", element: <Login /> },
+      { path: "/sing-up", element: <Register /> },
+      { path: "/forgot-password", element: <ForgotPassword /> },
+      { path: "/request-subject-change", element: <SubjectChangeRequest /> },
+      { path: "/ncert-books", element: <NcertBooks /> },
+      { path: "/ncert-books-solution", element: <NcertBooksSolution /> },
+      { path: "/state-board-books", element: <StateBoardBooks /> },
+      {
+        path: "/state-board-books-solution",
+        element: <StateBoardBooksSolution />,
+      },
+    ],
+  },
+  {
+    path: "/question-paper-generator",
+    element: <PrivateRoute component={DashboardLayout} />,
+    children: [
+      { index: true, element: <CreatePaper /> },
+      {
+        path: "/question-paper-generator/create-paper",
+        element: <CreatePaper />,
+      },
+      { path: "/question-paper-generator/view-paper", element: <ViewPaper /> },
+      {
+        path: "/question-paper-generator/create-assignment",
+        element: <CreateAssignment />,
+      },
+      {
+        path: "/question-paper-generator/view-assignment",
+        element: <ViewAssignment />,
+      },
+    ],
+  },
+  {
+    path: "/unauthorized",
+    element: <Unauthorized />, // Create an `Unauthorized` component if not already done
+  },
+  {
+    path: "/unverified",
+    element: <Unverified />,
+  },
+]);
+
 const RootRouter = () => {
-    return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />;
 };
 
 export default RootRouter;

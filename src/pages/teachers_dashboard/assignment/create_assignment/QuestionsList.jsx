@@ -57,13 +57,14 @@ export default function QuestionsList({ goNext, goPrev }) {
     enabled: !!token,
   });
 
-  // 2) Base filter by subject (from API) + std (from paper)
+  // 2) Base filter by subject (from API) + std + board (from paper)
   const baseQuestions = useMemo(() => {
-    if (!userResp?.user || !paper?.std) return [];
+    if (!userResp?.user || !paper?.std || !paper?.board) return [];
     const apiSubject = String(userResp.user.subject || "")
       .trim()
       .toLowerCase();
     const userStd = String(paper.std).trim().toLowerCase();
+    const userBoard = String(paper.board).trim().toLowerCase();
 
     return allQuestions.filter((q) => {
       const qSubject = String(q?.subject || "")
@@ -72,9 +73,14 @@ export default function QuestionsList({ goNext, goPrev }) {
       const qStd = String(q?.std || "")
         .trim()
         .toLowerCase();
-      return qSubject === apiSubject && qStd === userStd;
+      const qBoard = String(q?.board || "")
+        .trim()
+        .toLowerCase();
+      return (
+        qSubject === apiSubject && qStd === userStd && qBoard === userBoard
+      );
     });
-  }, [allQuestions, userResp?.user?.subject, paper?.std]);
+  }, [allQuestions, userResp?.user?.subject, paper?.std, paper?.board]);
 
   // 3) Debounced search (optional)
   const [localSearch, setLocalSearch] = useState("");
@@ -214,7 +220,7 @@ export function QuestionCard({ question }) {
         <div className="mb-2">
           <div className="flex justify-between items-center">
             <p className="text-[14px] font-semibold bg-white w-fit px-3 rounded-full shadow-inner ">
-              {question?.subject} - {question?.std}
+              {question?.subject} - {question?.std} - {question?.board}
             </p>
 
             <div>
